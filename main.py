@@ -71,6 +71,22 @@ def main():
             "Status":
                 "Success"
                 if result[0]["status"] == "success"
+jobs = extract_jobs(
+        result[0]["html"],
+        source["URL"],
+        source["Company"]
+    )
+
+    print(
+        "Jobs Found:",
+        len(jobs)
+    )
+
+    for job in jobs:
+        print(job)
+
+
+            
                 else "Failed",
 
             "Error":
