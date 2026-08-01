@@ -3,6 +3,7 @@ from pcip.excel.workbook import DashboardWorkbook
 from pcip.scanner.career import scan_career_page
 from pcip.scanner.job_parser import extract_jobs
 from pcip.run_logger import write_scan_log
+from pcip.utils.dedup import filter_new_jobs
 
 import csv
 
@@ -155,10 +156,32 @@ def main():
     if all_jobs:
 
 
+    new_jobs = filter_new_jobs(
+
+        dashboard.file_path,
+
+        all_jobs
+
+    )
+
+
+    print(
+        "New Jobs:",
+        len(new_jobs)
+    )
+
+
+    if new_jobs:
+
         dashboard.write_jobs(
+            new_jobs
+        )
 
-            all_jobs
 
+    else:
+
+        print(
+            "No new jobs" 
         )
 
 
