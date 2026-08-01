@@ -52,7 +52,7 @@ def main():
     all_jobs = []
 
 
-    # 当前测试前5个source
+
     for source in sources[:5]:
 
 
@@ -68,14 +68,15 @@ def main():
         )
 
 
-        if result[0]["status"] == "success":
+        status = (
 
-            status = "Success"
+            "Success"
 
+            if result[0]["status"] == "success"
 
-        else:
+            else "Failed"
 
-            status = "Failed"
+        )
 
 
 
@@ -107,11 +108,11 @@ def main():
         )
 
 
-        print(scan_item)
+        print(
+            scan_item
+        )
 
 
-
-        # 成功页面解析岗位
 
         if result[0]["status"] == "success":
 
@@ -139,8 +140,6 @@ def main():
 
 
 
-    # 写扫描日志
-
     write_scan_log(
 
         dashboard.file_path,
@@ -151,58 +150,60 @@ def main():
 
 
 
-    # 写岗位
-
     if all_jobs:
 
 
         new_jobs = filter_new_jobs(
 
-        dashboard.file_path,
+            dashboard.file_path,
 
-        all_jobs
+            all_jobs
 
-    )
-
-
-    print(
-        "New Jobs:",
-        len(new_jobs)
-    )
-
-
-    if new_jobs:
-
-        dashboard.write_jobs(
-            new_jobs
         )
+
+
+        print(
+            "New Jobs:",
+            len(new_jobs)
+        )
+
+
+        if new_jobs:
+
+
+            dashboard.write_jobs(
+                new_jobs
+            )
+
+
+            print(
+                "Jobs written:",
+                len(new_jobs)
+            )
+
+
+        else:
+
+
+            print(
+                "No new jobs"
+            )
+
 
 
     else:
 
-        print(
-            "No new jobs" 
-        )
-
 
         print(
-
-            "Jobs written:",
-
-            len(all_jobs)
-
+            "No jobs found"
         )
 
 
 
     print(
-
-        "Total Jobs Found:",
-
+        "Total Jobs Scanned:",
         len(all_jobs)
-
     )
-
 
 
 
