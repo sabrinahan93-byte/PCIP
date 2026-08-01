@@ -139,7 +139,18 @@ def main():
         scan_results
 
     )
+if all_jobs:
 
+    dashboard.write_jobs(
+        all_jobs
+    )
+
+    print(
+        "Jobs written:",
+        len(all_jobs)
+    )
+
+   
 
     print(
         "\nTotal Jobs Found:",
