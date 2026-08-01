@@ -1,38 +1,108 @@
+from openpyxl import Workbook, load_workbook
 from pathlib import Path
 from datetime import datetime
-from openpyxl import Workbook, load_workbook
-from openpyxl.styles import Font
 
 
 class DashboardWorkbook:
 
-    FILE_NAME = "Job_Dashboard.xlsx"
 
-    SHEETS = {
-        "Jobs": [
+    def __init__(self):
+
+        self.file_path = (
+            "output/Job_Dashboard.xlsx"
+        )
+
+
+
+    def initialize(self):
+
+        path = Path(
+            self.file_path
+        )
+
+
+        path.parent.mkdir(
+            exist_ok=True
+        )
+
+
+        if path.exists():
+            return
+
+
+        wb = Workbook()
+
+
+        # 删除默认sheet
+        ws = wb.active
+        ws.title = "Jobs"
+
+
+        jobs_headers = [
+
             "Job ID",
             "Company",
             "Job Title",
             "Location",
-            "Work Mode",
-            "Match Score",
-            "Job URL",
-            "Last Seen",
-            "Last Notified",
+            "Employment Type",
+            "Seniority",
+            "Posted Date",
             "Pipeline Status",
             "Applied Date",
-            "Notes",
-        ],
-        "Companies": [
+            "Job URL",
+            "Official Source",
+            "Also Found On"
+
+        ]
+
+
+        for col, header in enumerate(
+            jobs_headers,
+            1
+        ):
+
+            ws.cell(
+                row=1,
+                column=col
+            ).value = header
+
+
+
+        ws_company = wb.create_sheet(
+            "Companies"
+        )
+
+
+        company_headers = [
+
             "Company",
-            "Enabled",
             "Tier",
-            "Career URL",
-            "Last Scan",
-            "Scan Status",
-            "Notes",
-        ],
-        "Run_Log": [
+            "Enabled",
+            "Priority",
+            "Notes"
+
+        ]
+
+
+        for col, header in enumerate(
+            company_headers,
+            1
+        ):
+
+            ws_company.cell(
+                row=1,
+                column=col
+            ).value = header
+
+
+
+        ws_log = wb.create_sheet(
+            "Run_Log"
+        )
+
+
+        log_headers = [
+
             "Run Time",
             "Companies Scanned",
             "New Jobs",
@@ -40,161 +110,195 @@ class DashboardWorkbook:
             "Closed Jobs",
             "Failed Companies",
             "Duration",
-            "Result",
-        ],
-        "Run_Detail": [
+            "Result"
+
+        ]
+
+
+        for col, header in enumerate(
+            log_headers,
+            1
+        ):
+
+            ws_log.cell(
+                row=1,
+                column=col
+            ).value = header
+
+
+
+        ws_detail = wb.create_sheet(
+            "Run_Detail"
+        )
+
+
+        detail_headers = [
+
             "Run Time",
             "Company",
             "Source Type",
             "Source URL",
             "Status",
-            "Error Message",
-        ],
-    }
-    def write_jobs(self, jobs):
+            "Error Message"
 
-    from datetime import datetime
-
-    wb = load_workbook(
-        self.file_path
-    )
-
-    ws = wb["Jobs"]
+        ]
 
 
-    today = datetime.now().strftime(
-        "%Y%m%d"
-    )
+        for col, header in enumerate(
+            detail_headers,
+            1
+        ):
+
+            ws_detail.cell(
+                row=1,
+                column=col
+            ).value = header
 
 
-    # 获取已有JOB数量
-    existing = ws.max_row - 1
 
-
-    counter = existing + 1
-
-
-    for job in jobs:
-
-
-        job_id = (
-            f"JOB-{today}-"
-            f"{counter:04d}"
+        wb.save(
+            self.file_path
         )
 
 
-        ws.append(
 
-            [
-                job_id,
+    def sync_companies(
+        self,
+        companies
+    ):
 
-                job.get(
-                    "Company",
-                    ""
-                ),
-
-                job.get(
-                    "Job Title",
-                    ""
-                ),
-
-                "",      # Location
-
-                "",      # Employment Type
-
-                "",      # Seniority
-
-                "",      # Posted Date
-
-                "Observation",
-
-                "",      # Applied Date
-
-                job.get(
-                    "Job URL",
-                    ""
-                ),
-
-                job.get(
-                    "Official Source",
-                    ""
-                ),
-
-                ""
-
-            ]
-
+        wb = load_workbook(
+            self.file_path
         )
 
-
-        counter += 1
-
-
-    wb.save(
-        self.file_path
-    )
-    def __init__(self, output_folder="output"):
-
-        self.output_folder = Path(output_folder)
-        self.output_folder.mkdir(parents=True, exist_ok=True)
-
-        self.file_path = self.output_folder / self.FILE_NAME
-
-    def initialize(self):
-
-        if self.file_path.exists():
-            print("Job_Dashboard.xlsx already exists.")
-            return
-
-        wb = Workbook()
-
-        wb.remove(wb.active)
-
-        for sheet_name, headers in self.SHEETS.items():
-
-            ws = wb.create_sheet(sheet_name)
-
-            ws.freeze_panes = "A2"
-
-            for col, header in enumerate(headers, start=1):
-
-                cell = ws.cell(row=1, column=col)
-
-                cell.value = header
-
-                cell.font = Font(bold=True)
-
-                ws.column_dimensions[cell.column_letter].width = max(
-                    len(header) + 5,
-                    18
-                )
-
-        wb.save(self.file_path)
-
-        print(f"Dashboard created successfully:\n{self.file_path}")
-
-    def sync_companies(self, companies):
-
-        wb = load_workbook(self.file_path)
 
         ws = wb["Companies"]
 
-        # 删除除标题外所有内容
-        if ws.max_row > 1:
-            ws.delete_rows(2, ws.max_row)
 
         for company in companies:
 
-            ws.append([
-                company["Company"],
-                company["Enabled"],
-                company["Tier"],
-                company["CareerURL"],
-                "",
-                "",
-                company["Notes"],
-            ])
+            ws.append(
+                [
+                    company.get(
+                        "Company",
+                        ""
+                    ),
 
-        wb.save(self.file_path)
+                    company.get(
+                        "Tier",
+                        ""
+                    ),
 
-        print(f"Companies synced: {len(companies)}")
+                    company.get(
+                        "Enabled",
+                        ""
+                    ),
+
+                    company.get(
+                        "Priority",
+                        ""
+                    ),
+
+                    company.get(
+                        "Notes",
+                        ""
+                    )
+                ]
+            )
+
+
+        wb.save(
+            self.file_path
+        )
+
+
+
+    def write_jobs(
+        self,
+        jobs
+    ):
+
+
+        wb = load_workbook(
+            self.file_path
+        )
+
+
+        ws = wb["Jobs"]
+
+
+        today = datetime.now().strftime(
+            "%Y%m%d"
+        )
+
+
+        existing_rows = (
+            ws.max_row - 1
+        )
+
+
+        counter = existing_rows + 1
+
+
+
+        for job in jobs:
+
+
+            job_id = (
+                f"JOB-{today}-"
+                f"{counter:04d}"
+            )
+
+
+            ws.append(
+
+                [
+
+                    job_id,
+
+                    job.get(
+                        "Company",
+                        ""
+                    ),
+
+                    job.get(
+                        "Job Title",
+                        ""
+                    ),
+
+                    "",
+
+                    "",
+
+                    "",
+
+                    "",
+
+                    "Observation",
+
+                    "",
+
+                    job.get(
+                        "Job URL",
+                        ""
+                    ),
+
+                    job.get(
+                        "Official Source",
+                        ""
+                    ),
+
+                    ""
+
+                ]
+
+            )
+
+
+            counter += 1
+
+
+
+        wb.save(
+            self.file_path
+        )
