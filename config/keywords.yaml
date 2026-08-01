@@ -1,1 +1,79 @@
+role_keywords:
 
+  high:
+    - Payment Partnerships
+    - Strategic Partnerships
+    - Channel Partnerships
+    - Enterprise Business Development
+    - Commercial Growth
+    - Customer Success
+    - Customer Success Manager
+    - Account Management
+    - Key Account Management
+    - Merchant Success
+    - Merchant Partnerships
+    - Payment Solutions
+    - Partner Manager
+    - Business Development Manager
+    - Partnerships Manager
+
+  medium:
+    - Sales
+    - Sales Manager
+    - Solution Consultant
+    - Solution Engineer
+    - Product Marketing
+
+industry_keywords:
+
+  high:
+    - Cross-border Payments
+    - Global Payments
+    - Payment Infrastructure
+    - Merchant Acquiring
+    - Payment Orchestration
+    - PSP
+    - Issuing
+    - Acquiring
+
+  medium:
+    - FinTech
+    - Banking
+    - Financial Services
+
+technology_keywords:
+
+  high:
+    - Stablecoin
+    - Stablecoin Payments
+    - Fiat Infrastructure
+    - Crypto Infrastructure
+    - PayFi
+    - Agentic Commerce
+    - AI Agent Payments
+    - x402
+
+  medium:
+    - Blockchain
+    - Digital Assets
+    - Wallet
+    - Embedded Finance
+    - API
+
+exclude_keywords:
+
+  title:
+    - Intern
+    - Internship
+    - Graduate
+    - Campus
+    - Junior
+    - Associate Consultant
+
+  description:
+    - Indonesian
+    - Bahasa Indonesia
+    - Thai Language
+    - Vietnamese Language
+    - Institutional Sales
+    - Institutional Trading
