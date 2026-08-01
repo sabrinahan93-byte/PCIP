@@ -111,3 +111,29 @@ class DashboardWorkbook:
             width = max(len(str(header)) + 5, 15)
 
             ws.column_dimensions[column[0].column_letter].width = width
+def write_companies(self, companies):
+
+    from openpyxl import load_workbook
+
+    workbook = load_workbook(self.file_path)
+
+    ws = workbook["Companies"]
+
+    if ws.max_row > 1:
+        ws.delete_rows(2, ws.max_row)
+
+    for company in companies:
+
+        ws.append([
+            company["Company"],
+            company["Enabled"],
+            company["Tier"],
+            company["CareerURL"],
+            "",
+            "",
+            company["Notes"],
+        ])
+
+    workbook.save(self.file_path)
+
+    print(f"Loaded {len(companies)} companies.")
