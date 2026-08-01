@@ -1,1 +1,80 @@
+name: Daily Job Scan
 
+
+on:
+
+  schedule:
+
+    - cron: "0 1 * * *"
+
+  workflow_dispatch:
+
+
+
+jobs:
+
+
+  scan:
+
+
+    runs-on: ubuntu-latest
+
+
+
+    permissions:
+
+      contents: write
+
+
+
+    steps:
+
+
+      - name: Checkout repository
+
+        uses: actions/checkout@v4
+
+
+
+      - name: Setup Python
+
+        uses: actions/setup-python@v5
+
+        with:
+
+          python-version: "3.11"
+
+
+
+      - name: Install dependencies
+
+        run: |
+
+          pip install -r requirements.txt
+
+
+
+      - name: Run scanner
+
+        run: |
+
+          python main.py
+
+
+
+      - name: Commit updated dashboard
+
+        run: |
+
+          git config --global user.name "github-actions"
+
+          git config --global user.email "github-actions@github.com"
+
+
+          git add output/Job_Dashboard.xlsx
+
+
+          git commit -m "Update Job Dashboard" || echo "No changes"
+
+
+          git push
