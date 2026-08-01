@@ -81,6 +81,3 @@ write_scan_log(
 )
 
 
-if __name__ == "__main__":
-
-    main()
