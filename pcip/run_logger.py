@@ -47,17 +47,19 @@ def write_scan_log(
 
 
     ws_log.append(
-        [
-            now,
-            len(scan_results),
-            "",
-            success_count,
-            ",".join(list(set(failed))),
-            "",
-            "",
-            "Completed"
-        ]
-    )
+    [
+        now,                    # Run Time
+        len(scan_results),      # Companies Scanned
+        0,                      # New Jobs
+        0,                      # Updated Jobs
+        0,                      # Closed Jobs
+        ",".join(
+            list(set(failed))
+        ),                      # Failed Companies
+        "",                     # Duration
+        "Completed"             # Result
+    ]
+)
 
 
     wb.save(file_path)
