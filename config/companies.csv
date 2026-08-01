@@ -1,7 +1,3 @@
-PriorityScore
-100
-90
-80
 Company,CareerURL,Enabled,Tier,Notes
 Stripe,https://stripe.com/jobs,TRUE,S,
 Adyen,https://careers.adyen.com,TRUE,S,
