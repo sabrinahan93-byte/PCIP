@@ -27,7 +27,6 @@ class DashboardWorkbook:
         )
 
 
-        # 如果已经存在，不重新创建
         if path.exists():
 
             return
@@ -36,11 +35,6 @@ class DashboardWorkbook:
 
         wb = Workbook()
 
-
-
-        # =====================
-        # Jobs Sheet
-        # =====================
 
         ws = wb.active
 
@@ -77,7 +71,6 @@ class DashboardWorkbook:
         ]
 
 
-
         for col, header in enumerate(
             jobs_headers,
             1
@@ -90,120 +83,19 @@ class DashboardWorkbook:
 
 
 
-        # =====================
-        # Companies Sheet
-        # =====================
-
-        ws_company = wb.create_sheet(
+        wb.create_sheet(
             "Companies"
         )
 
 
-        company_headers = [
-
-            "Company",
-
-            "Tier",
-
-            "Enabled",
-
-            "Priority",
-
-            "Notes"
-
-        ]
-
-
-        for col, header in enumerate(
-            company_headers,
-            1
-        ):
-
-            ws_company.cell(
-                row=1,
-                column=col
-            ).value = header
-
-
-
-        # =====================
-        # Run Log Sheet
-        # =====================
-
-        ws_log = wb.create_sheet(
+        wb.create_sheet(
             "Run_Log"
         )
 
 
-        log_headers = [
-
-            "Run Time",
-
-            "Companies Scanned",
-
-            "New Jobs",
-
-            "Updated Jobs",
-
-            "Closed Jobs",
-
-            "Failed Companies",
-
-            "Duration",
-
-            "Result"
-
-        ]
-
-
-        for col, header in enumerate(
-            log_headers,
-            1
-        ):
-
-            ws_log.cell(
-                row=1,
-                column=col
-            ).value = header
-
-
-
-        # =====================
-        # Run Detail Sheet
-        # =====================
-
-        ws_detail = wb.create_sheet(
+        wb.create_sheet(
             "Run_Detail"
         )
-
-
-        detail_headers = [
-
-            "Run Time",
-
-            "Company",
-
-            "Source Type",
-
-            "Source URL",
-
-            "Status",
-
-            "Error Message"
-
-        ]
-
-
-        for col, header in enumerate(
-            detail_headers,
-            1
-        ):
-
-            ws_detail.cell(
-                row=1,
-                column=col
-            ).value = header
-
 
 
         wb.save(
@@ -226,8 +118,6 @@ class DashboardWorkbook:
         ws = wb["Companies"]
 
 
-
-        # 防止重复同步
         existing = set()
 
 
@@ -314,22 +204,23 @@ class DashboardWorkbook:
         )
 
 
-        current_count = (
-            ws.max_row - 1
+        counter = (
+            ws.max_row
         )
-
-
-        counter = current_count + 1
 
 
 
         for job in jobs:
 
 
+            counter += 1
+
+
+
             job_id = (
 
                 f"JOB-{today}-"
-                f"{counter:04d}"
+                f"{counter-1:04d}"
 
             )
 
@@ -406,7 +297,78 @@ class DashboardWorkbook:
             )
 
 
-            counter += 1
+
+        wb.save(
+            self.file_path
+        )
+
+
+
+    def update_existing_job(
+        self,
+        row_number,
+        job
+    ):
+
+
+        wb = load_workbook(
+            self.file_path
+        )
+
+
+        ws = wb["Jobs"]
+
+
+        # 只更新系统字段
+        # 不触碰人工字段
+
+
+        ws.cell(
+            row=row_number,
+            column=2
+        ).value = job.get(
+            "Company",
+            ""
+        )
+
+
+        ws.cell(
+            row=row_number,
+            column=3
+        ).value = job.get(
+            "Job Title",
+            ""
+        )
+
+
+        ws.cell(
+            row=row_number,
+            column=10
+        ).value = job.get(
+            "Job URL",
+            ""
+        )
+
+
+        ws.cell(
+            row=row_number,
+            column=11
+        ).value = job.get(
+            "Official Source",
+            ""
+        )
+
+
+        # Column 8:
+        # Pipeline Status
+        #
+        # 保留人工修改
+
+
+        # Column 9:
+        # Applied Date
+        #
+        # 保留人工修改
 
 
 
