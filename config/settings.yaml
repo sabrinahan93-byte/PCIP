@@ -1,31 +1,23 @@
 project:
-
   name: PCIP
-
-  version: 1.0.0
+  version: "1.0.0"
 
 scan:
-
   timeout: 30
-
   retry: 2
-
-  user_agent: Mozilla
+  interval: daily
+  user_agent: default
 
 match:
-
   minimum_score: 75
 
 notification:
-
   always_send: true
 
 output:
-
   excel: output/Job_Dashboard.xlsx
-
   report: output/daily_report.md
+  log: logs/run.log
 
 logging:
-
   level: INFO
