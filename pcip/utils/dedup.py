@@ -1,5 +1,6 @@
 from openpyxl import load_workbook
 from pathlib import Path
+import re
 
 
 def normalize(value):
@@ -16,35 +17,103 @@ def normalize(value):
 
         .lower()
 
-        .replace("\n", " ")
-
-        .rstrip("/")
-
     )
 
 
 
+def extract_job_identifier(url):
+
+    """
+    Extract stable job identifier
+    Especially for LinkedIn URLs
+    """
+
+    if not url:
+
+        return ""
+
+
+    url = normalize(url)
+
+
+    # LinkedIn job id
+    linkedin_match = re.search(
+        r"jobs/view/.*?-(\d+)",
+        url
+    )
+
+
+    if linkedin_match:
+
+        return linkedin_match.group(1)
+
+
+
+    # Generic URL last number
+    number_match = re.search(
+        r"(\d+)",
+        url
+    )
+
+
+    if number_match:
+
+        return number_match.group(1)
+
+
+
+    return url.split("?")[0]
+
+
+
 def create_job_key(
+
     company,
+
     title,
+
     url
+
 ):
+
+
+    company = normalize(company)
+
+    title = normalize(title)
+
+
+    job_id = extract_job_identifier(
+        url
+    )
+
+
+    if job_id:
+
+        return (
+
+            company,
+
+            job_id
+
+        )
+
 
     return (
 
-        normalize(company),
+        company,
 
-        normalize(title),
-
-        normalize(url)
+        title
 
     )
 
 
 
 def filter_new_jobs(
+
     file_path,
+
     jobs
+
 ):
 
 
@@ -162,7 +231,6 @@ def filter_new_jobs(
         "New jobs after filtering:",
         len(new_jobs)
     )
-
 
 
     return new_jobs
