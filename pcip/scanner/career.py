@@ -33,14 +33,16 @@ def scan_career_page(url):
 
         title = soup.title.text if soup.title else ""
 
-        jobs.append(
-            {
-                "source": url,
-                "page_title": title,
-                "status": "success"
-            }
-        )
+jobs.append(
+{
+"source":url,
+"html":response.text,
+"page_title":title,
+"status":"success"
+}
+)
 
+    
     except Exception as e:
 
         jobs.append(
