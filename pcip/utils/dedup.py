@@ -5,14 +5,21 @@ from pathlib import Path
 def normalize(value):
 
     if value is None:
+
         return ""
 
     return (
+
         str(value)
+
         .strip()
+
         .lower()
+
         .replace("\n", " ")
+
         .rstrip("/")
+
     )
 
 
@@ -46,30 +53,8 @@ def filter_new_jobs(
     ).resolve()
 
 
-    print(
-        "Dedup reading file:",
-        absolute_path
-    )
-
-
-    if not absolute_path.exists():
-
-        print(
-            "File not found"
-        )
-
-        return jobs
-
-
-
     wb = load_workbook(
         absolute_path
-    )
-
-
-    print(
-        "Workbook sheets:",
-        wb.sheetnames
     )
 
 
@@ -80,41 +65,28 @@ def filter_new_jobs(
 
 
 
-    print(
-        "Jobs sheet max row:",
-        ws.max_row
-    )
-
-
-
     for row in ws.iter_rows(
+
         min_row=2,
+
         values_only=True
+
     ):
 
 
-        company = row[1]
+        existing_keys.add(
 
-        title = row[2]
+            create_job_key(
 
-        url = row[9]
+                row[1],
 
+                row[2],
 
-        if company or title or url:
-
-            existing_keys.add(
-
-                create_job_key(
-
-                    company,
-
-                    title,
-
-                    url
-
-                )
+                row[9]
 
             )
+
+        )
 
 
 
@@ -154,7 +126,6 @@ def filter_new_jobs(
         )
 
 
-
         if key in existing_keys:
 
 
@@ -162,6 +133,12 @@ def filter_new_jobs(
 
 
         else:
+
+
+            print(
+                "NEW JOB KEY:",
+                key
+            )
 
 
             new_jobs.append(
