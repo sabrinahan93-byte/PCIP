@@ -1,3 +1,4 @@
+from pcip.scanner.job_parser import extract_jobs
 from pcip.company_loader import load_companies
 from pcip.excel.workbook import DashboardWorkbook
 from pcip.scanner.career import scan_career_page
