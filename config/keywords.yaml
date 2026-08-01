@@ -1,6 +1,8 @@
 role_keywords:
 
   high:
+  weight: 30
+  values:
     - Payment Partnerships
     - Strategic Partnerships
     - Channel Partnerships
@@ -18,6 +20,8 @@ role_keywords:
     - Partnerships Manager
 
   medium:
+  weight: 15
+  values:
     - Sales
     - Sales Manager
     - Solution Consultant
