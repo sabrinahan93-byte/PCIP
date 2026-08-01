@@ -1,1 +1,5 @@
+scan_time: "09:00"
 
+notify_always: true
+
+minimum_match_score: 75
