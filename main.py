@@ -1,3 +1,4 @@
+from pcip.run_logger import write_scan_log
 from pcip.company_loader import load_companies
 from pcip.excel.workbook import DashboardWorkbook
 from pcip.scanner.career import scan_career_page
@@ -39,20 +40,45 @@ def main():
     sources = load_sources()
 
 
-    for source in sources[:5]:
+    scan_results = []
 
-        print(
-            "\nScanning:",
-            source["Company"],
-            source["SourceType"]
-        )
 
-        result = scan_career_page(
-            source["URL"]
-        )
+for source in sources[:5]:
 
-        print(result)
+    print(
+        "\nScanning:",
+        source["Company"],
+        source["SourceType"]
+    )
 
+
+    result = scan_career_page(
+        source["URL"]
+    )
+
+
+    status = result[0]["status"]
+
+
+    scan_results.append(
+        {
+            "Company": source["Company"],
+            "SourceType": source["SourceType"],
+            "URL": source["URL"],
+            "Status": 
+                "Success"
+                if status == "success"
+                else "Failed",
+            "Error":
+                result[0].get("error","")
+        }
+    )
+
+
+write_scan_log(
+    dashboard.file_path,
+    scan_results
+)
 
 
 if __name__ == "__main__":
