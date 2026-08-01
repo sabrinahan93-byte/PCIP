@@ -24,3 +24,9 @@ jobs:
       - name: Run PCIP
         run: |
           python main.py
+
+      - name: Upload Job Dashboard
+        uses: actions/upload-artifact@v4
+        with:
+          name: Job_Dashboard
+          path: output/Job_Dashboard.xlsx
