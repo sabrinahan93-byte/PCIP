@@ -7,6 +7,7 @@ from pcip.run_logger import write_scan_log
 import csv
 
 
+
 def load_sources():
 
     sources = []
@@ -21,6 +22,7 @@ def load_sources():
         for row in reader:
 
             if row["Enabled"].upper() == "TRUE":
+
                 sources.append(row)
 
     return sources
@@ -36,7 +38,9 @@ def main():
 
     companies = load_companies()
 
-    dashboard.sync_companies(companies)
+    dashboard.sync_companies(
+        companies
+    )
 
 
     sources = load_sources()
@@ -44,12 +48,12 @@ def main():
 
     scan_results = []
 
-
     all_jobs = []
 
 
-    # 当前阶段测试前5个Source
+    # 当前测试前5个source
     for source in sources[:5]:
+
 
         print(
             "\nScanning:",
@@ -63,22 +67,30 @@ def main():
         )
 
 
-        status = (
-            "Success"
-            if result[0]["status"] == "success"
-            else "Failed"
-        )
+        if result[0]["status"] == "success":
+
+            status = "Success"
+
+
+        else:
+
+            status = "Failed"
+
 
 
         scan_item = {
 
-            "Company": source["Company"],
+            "Company":
+                source["Company"],
 
-            "SourceType": source["SourceType"],
+            "SourceType":
+                source["SourceType"],
 
-            "URL": source["URL"],
+            "URL":
+                source["URL"],
 
-            "Status": status,
+            "Status":
+                status,
 
             "Error":
                 result[0].get(
@@ -98,7 +110,8 @@ def main():
 
 
 
-        # 如果网页访问成功，开始解析岗位
+        # 成功页面解析岗位
+
         if result[0]["status"] == "success":
 
 
@@ -124,13 +137,8 @@ def main():
             )
 
 
-            for job in jobs:
 
-                print(job)
-
-
-
-    # 写入扫描日志
+    # 写扫描日志
 
     write_scan_log(
 
@@ -139,23 +147,39 @@ def main():
         scan_results
 
     )
-if all_jobs:
 
-    dashboard.write_jobs(
-        all_jobs
-    )
+
+
+    # 写岗位
+
+    if all_jobs:
+
+
+        dashboard.write_jobs(
+
+            all_jobs
+
+        )
+
+
+        print(
+
+            "Jobs written:",
+
+            len(all_jobs)
+
+        )
+
+
 
     print(
-        "Jobs written:",
+
+        "Total Jobs Found:",
+
         len(all_jobs)
+
     )
 
-   
-
-    print(
-        "\nTotal Jobs Found:",
-        len(all_jobs)
-    )
 
 
 
