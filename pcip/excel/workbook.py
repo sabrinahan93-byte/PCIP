@@ -1,13 +1,10 @@
 from pathlib import Path
 
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font
 
 
 class DashboardWorkbook:
-    """
-    Responsible for creating and maintaining Job_Dashboard.xlsx
-    """
 
     FILE_NAME = "Job_Dashboard.xlsx"
 
@@ -58,82 +55,65 @@ class DashboardWorkbook:
     def __init__(self, output_folder="output"):
 
         self.output_folder = Path(output_folder)
-
         self.output_folder.mkdir(parents=True, exist_ok=True)
 
         self.file_path = self.output_folder / self.FILE_NAME
 
     def initialize(self):
-        """
-        Create dashboard only if it does not already exist.
-        """
 
         if self.file_path.exists():
-
             print("Job_Dashboard.xlsx already exists.")
-
             return
 
-        workbook = Workbook()
+        wb = Workbook()
 
-        workbook.remove(workbook.active)
+        wb.remove(wb.active)
 
         for sheet_name, headers in self.SHEETS.items():
 
-            ws = workbook.create_sheet(title=sheet_name)
+            ws = wb.create_sheet(sheet_name)
 
-            for column, header in enumerate(headers, start=1):
+            ws.freeze_panes = "A2"
 
-                cell = ws.cell(row=1, column=column)
+            for col, header in enumerate(headers, start=1):
+
+                cell = ws.cell(row=1, column=col)
 
                 cell.value = header
 
                 cell.font = Font(bold=True)
 
-            ws.freeze_panes = "A2"
+                ws.column_dimensions[cell.column_letter].width = max(
+                    len(header) + 5,
+                    18
+                )
 
-            self._adjust_column_width(ws)
-
-        workbook.save(self.file_path)
+        wb.save(self.file_path)
 
         print(f"Dashboard created successfully:\n{self.file_path}")
 
-    @staticmethod
-    def _adjust_column_width(ws):
-        """
-        Auto adjust column width according to header length.
-        """
+    def sync_companies(self, companies):
 
-        for column in ws.columns:
+        wb = load_workbook(self.file_path)
 
-            header = column[0].value
+        ws = wb["Companies"]
 
-            width = max(len(str(header)) + 5, 15)
+        # 删除除标题外所有内容
+        if ws.max_row > 1:
+            ws.delete_rows(2, ws.max_row)
 
-            ws.column_dimensions[column[0].column_letter].width = width
-def write_companies(self, companies):
+        for company in companies:
 
-    from openpyxl import load_workbook
+            ws.append([
+                company["Company"],
+                company["Enabled"],
+                company["Tier"],
+                company["CareerURL"],
+                "",
+                "",
+                company["Notes"],
+            ])
 
-    workbook = load_workbook(self.file_path)
+        wb.save(self.file_path)
 
-    ws = workbook["Companies"]
-
-    if ws.max_row > 1:
-        ws.delete_rows(2, ws.max_row)
-
-    for company in companies:
-
-        ws.append([
-            company["Company"],
-            company["Enabled"],
-            company["Tier"],
-            company["CareerURL"],
-            "",
-            "",
-            company["Notes"],
-        ])
-
-    workbook.save(self.file_path)
-
-    print(f"Loaded {len(companies)} companies.")
+        print(f"Companies synced: {len(companies)}")
