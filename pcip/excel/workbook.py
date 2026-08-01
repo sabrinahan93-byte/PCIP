@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from datetime import datetime
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font
 
@@ -51,7 +51,88 @@ class DashboardWorkbook:
             "Error Message",
         ],
     }
+    def write_jobs(self, jobs):
 
+    from datetime import datetime
+
+    wb = load_workbook(
+        self.file_path
+    )
+
+    ws = wb["Jobs"]
+
+
+    today = datetime.now().strftime(
+        "%Y%m%d"
+    )
+
+
+    # 获取已有JOB数量
+    existing = ws.max_row - 1
+
+
+    counter = existing + 1
+
+
+    for job in jobs:
+
+
+        job_id = (
+            f"JOB-{today}-"
+            f"{counter:04d}"
+        )
+
+
+        ws.append(
+
+            [
+                job_id,
+
+                job.get(
+                    "Company",
+                    ""
+                ),
+
+                job.get(
+                    "Job Title",
+                    ""
+                ),
+
+                "",      # Location
+
+                "",      # Employment Type
+
+                "",      # Seniority
+
+                "",      # Posted Date
+
+                "Observation",
+
+                "",      # Applied Date
+
+                job.get(
+                    "Job URL",
+                    ""
+                ),
+
+                job.get(
+                    "Official Source",
+                    ""
+                ),
+
+                ""
+
+            ]
+
+        )
+
+
+        counter += 1
+
+
+    wb.save(
+        self.file_path
+    )
     def __init__(self, output_folder="output"):
 
         self.output_folder = Path(output_folder)
