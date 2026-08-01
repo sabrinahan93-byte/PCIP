@@ -44,11 +44,11 @@ class DashboardWorkbook:
         ],
         "Run_Detail": [
             "Run Time",
-            "Change Type",
             "Company",
-            "Job Title",
-            "Match Score",
-            "Job URL",
+            "Source Type",
+            "Source URL",
+            "Status",
+            "Error Message",
         ],
     }
 
