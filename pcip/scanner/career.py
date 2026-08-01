@@ -1,56 +1,75 @@
 import requests
-from bs4 import BeautifulSoup
 
 
 def scan_career_page(url):
 
-    jobs = []
-
     if not url:
-        return jobs
+        return [
+            {
+                "source": url,
+                "status": "failed",
+                "error": "Empty URL"
+            }
+        ]
+
 
     try:
 
         headers = {
-            "User-Agent": (
-                "Mozilla/5.0 "
-                "(Windows NT 10.0; Win64; x64)"
-            )
+
+            "User-Agent":
+                (
+                    "Mozilla/5.0 "
+                    "(Windows NT 10.0; Win64; x64)"
+                )
+
         }
 
+
         response = requests.get(
+
             url,
+
             headers=headers,
+
             timeout=15
+
         )
+
 
         response.raise_for_status()
 
-        soup = BeautifulSoup(
-            response.text,
-            "html.parser"
-        )
 
-        title = soup.title.text if soup.title else ""
+        return [
 
-jobs.append(
-{
-"source":url,
-"html":response.text,
-"page_title":title,
-"status":"success"
-}
-)
+            {
 
-    
+                "source": url,
+
+                "html": response.text,
+
+                "page_title": "",
+
+                "status": "success"
+
+            }
+
+        ]
+
+
     except Exception as e:
 
-        jobs.append(
-            {
-                "source": url,
-                "status": "failed",
-                "error": str(e)
-            }
-        )
 
-    return jobs
+        return [
+
+            {
+
+                "source": url,
+
+                "status": "failed",
+
+                "error": str(e)
+
+            }
+
+        ]
