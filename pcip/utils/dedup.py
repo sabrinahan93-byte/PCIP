@@ -1,6 +1,19 @@
 from openpyxl import load_workbook
 
 
+def normalize(value):
+
+    if not value:
+        return ""
+
+    return (
+        str(value)
+        .strip()
+        .lower()
+        .rstrip("/")
+    )
+
+
 
 def filter_new_jobs(
     file_path,
@@ -23,20 +36,32 @@ def filter_new_jobs(
         values_only=True
     ):
 
-        company = row[1]
 
-        title = row[2]
+        company = normalize(
+            row[1]
+        )
 
-        url = row[9]
+
+        title = normalize(
+            row[2]
+        )
+
+
+        url = normalize(
+            row[9]
+        )
 
 
         existing.add(
+
             (
                 company,
                 title,
                 url
             )
+
         )
+
 
 
     new_jobs = []
@@ -44,21 +69,25 @@ def filter_new_jobs(
 
     for job in jobs:
 
+
         key = (
 
-            job.get(
-                "Company",
-                ""
+            normalize(
+                job.get(
+                    "Company"
+                )
             ),
 
-            job.get(
-                "Job Title",
-                ""
+            normalize(
+                job.get(
+                    "Job Title"
+                )
             ),
 
-            job.get(
-                "Job URL",
-                ""
+            normalize(
+                job.get(
+                    "Job URL"
+                )
             )
 
         )
@@ -66,9 +95,11 @@ def filter_new_jobs(
 
         if key not in existing:
 
+
             new_jobs.append(
                 job
             )
+
 
 
     return new_jobs
