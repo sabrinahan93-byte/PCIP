@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import datetime
 
 
+
 class DashboardWorkbook:
 
 
@@ -26,34 +27,55 @@ class DashboardWorkbook:
         )
 
 
+        # 如果已经存在，不重新创建
         if path.exists():
+
             return
+
 
 
         wb = Workbook()
 
 
-        # 删除默认sheet
+
+        # =====================
+        # Jobs Sheet
+        # =====================
+
         ws = wb.active
+
         ws.title = "Jobs"
+
 
 
         jobs_headers = [
 
             "Job ID",
+
             "Company",
+
             "Job Title",
+
             "Location",
+
             "Employment Type",
+
             "Seniority",
+
             "Posted Date",
+
             "Pipeline Status",
+
             "Applied Date",
+
             "Job URL",
+
             "Official Source",
+
             "Also Found On"
 
         ]
+
 
 
         for col, header in enumerate(
@@ -68,6 +90,10 @@ class DashboardWorkbook:
 
 
 
+        # =====================
+        # Companies Sheet
+        # =====================
+
         ws_company = wb.create_sheet(
             "Companies"
         )
@@ -76,9 +102,13 @@ class DashboardWorkbook:
         company_headers = [
 
             "Company",
+
             "Tier",
+
             "Enabled",
+
             "Priority",
+
             "Notes"
 
         ]
@@ -96,6 +126,10 @@ class DashboardWorkbook:
 
 
 
+        # =====================
+        # Run Log Sheet
+        # =====================
+
         ws_log = wb.create_sheet(
             "Run_Log"
         )
@@ -104,12 +138,19 @@ class DashboardWorkbook:
         log_headers = [
 
             "Run Time",
+
             "Companies Scanned",
+
             "New Jobs",
+
             "Updated Jobs",
+
             "Closed Jobs",
+
             "Failed Companies",
+
             "Duration",
+
             "Result"
 
         ]
@@ -127,6 +168,10 @@ class DashboardWorkbook:
 
 
 
+        # =====================
+        # Run Detail Sheet
+        # =====================
+
         ws_detail = wb.create_sheet(
             "Run_Detail"
         )
@@ -135,10 +180,15 @@ class DashboardWorkbook:
         detail_headers = [
 
             "Run Time",
+
             "Company",
+
             "Source Type",
+
             "Source URL",
+
             "Status",
+
             "Error Message"
 
         ]
@@ -167,6 +217,7 @@ class DashboardWorkbook:
         companies
     ):
 
+
         wb = load_workbook(
             self.file_path
         )
@@ -175,36 +226,66 @@ class DashboardWorkbook:
         ws = wb["Companies"]
 
 
+
+        # 防止重复同步
+        existing = set()
+
+
+        for row in ws.iter_rows(
+            min_row=2,
+            values_only=True
+        ):
+
+            if row[0]:
+
+                existing.add(
+                    row[0]
+                )
+
+
+
         for company in companies:
 
-            ws.append(
-                [
-                    company.get(
-                        "Company",
-                        ""
-                    ),
 
-                    company.get(
-                        "Tier",
-                        ""
-                    ),
-
-                    company.get(
-                        "Enabled",
-                        ""
-                    ),
-
-                    company.get(
-                        "Priority",
-                        ""
-                    ),
-
-                    company.get(
-                        "Notes",
-                        ""
-                    )
-                ]
+            name = company.get(
+                "Company",
+                ""
             )
+
+
+            if name not in existing:
+
+
+                ws.append(
+
+                    [
+
+                        name,
+
+                        company.get(
+                            "Tier",
+                            ""
+                        ),
+
+                        company.get(
+                            "Enabled",
+                            ""
+                        ),
+
+                        company.get(
+                            "Priority",
+                            ""
+                        ),
+
+                        company.get(
+                            "Notes",
+                            ""
+                        )
+
+                    ]
+
+                )
+
 
 
         wb.save(
@@ -227,17 +308,18 @@ class DashboardWorkbook:
         ws = wb["Jobs"]
 
 
+
         today = datetime.now().strftime(
             "%Y%m%d"
         )
 
 
-        existing_rows = (
+        current_count = (
             ws.max_row - 1
         )
 
 
-        counter = existing_rows + 1
+        counter = current_count + 1
 
 
 
@@ -245,9 +327,12 @@ class DashboardWorkbook:
 
 
             job_id = (
+
                 f"JOB-{today}-"
                 f"{counter:04d}"
+
             )
+
 
 
             ws.append(
@@ -256,39 +341,65 @@ class DashboardWorkbook:
 
                     job_id,
 
+
                     job.get(
                         "Company",
                         ""
                     ),
+
 
                     job.get(
                         "Job Title",
                         ""
                     ),
 
-                    "",
 
-                    "",
+                    job.get(
+                        "Location",
+                        ""
+                    ),
 
-                    "",
 
-                    "",
+                    job.get(
+                        "Employment Type",
+                        ""
+                    ),
+
+
+                    job.get(
+                        "Seniority",
+                        ""
+                    ),
+
+
+                    job.get(
+                        "Posted Date",
+                        ""
+                    ),
+
 
                     "Observation",
 
+
                     "",
+
 
                     job.get(
                         "Job URL",
                         ""
                     ),
 
+
                     job.get(
                         "Official Source",
                         ""
                     ),
 
-                    ""
+
+                    job.get(
+                        "Also Found On",
+                        ""
+                    )
 
                 ]
 
