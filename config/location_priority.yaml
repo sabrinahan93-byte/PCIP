@@ -20,9 +20,18 @@ rules:
     only_high_quality_company: true
 
   remote:
+
     include_keywords:
       - Remote
       - Global Remote
       - Worldwide
       - Work From Anywhere
       - Distributed
+
+    exclude_keywords:
+      - US Only
+      - Europe Only
+      - UK Only
+      - Canada Only
+      - Australia Only
+      - Japan Only
