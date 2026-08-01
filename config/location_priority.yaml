@@ -1,1 +1,28 @@
+priority:
 
+  high:
+    - Shenzhen
+    - Hong Kong
+    - Remote
+    - Global Remote
+
+  medium:
+    - Malaysia
+    - APAC Remote
+
+  low:
+    - Singapore
+
+rules:
+
+  singapore:
+    minimum_match_score: 85
+    only_high_quality_company: true
+
+  remote:
+    include_keywords:
+      - Remote
+      - Global Remote
+      - Worldwide
+      - Work From Anywhere
+      - Distributed
