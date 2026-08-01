@@ -1,4 +1,5 @@
 from openpyxl import load_workbook
+from pathlib import Path
 
 
 def normalize(value):
@@ -39,8 +40,36 @@ def filter_new_jobs(
     jobs
 ):
 
-    wb = load_workbook(
+
+    absolute_path = Path(
         file_path
+    ).resolve()
+
+
+    print(
+        "Dedup reading file:",
+        absolute_path
+    )
+
+
+    if not absolute_path.exists():
+
+        print(
+            "File not found"
+        )
+
+        return jobs
+
+
+
+    wb = load_workbook(
+        absolute_path
+    )
+
+
+    print(
+        "Workbook sheets:",
+        wb.sheetnames
     )
 
 
@@ -50,7 +79,14 @@ def filter_new_jobs(
     existing_keys = set()
 
 
-    # 读取Excel已有岗位
+
+    print(
+        "Jobs sheet max row:",
+        ws.max_row
+    )
+
+
+
     for row in ws.iter_rows(
         min_row=2,
         values_only=True
@@ -64,20 +100,21 @@ def filter_new_jobs(
         url = row[9]
 
 
-        key = create_job_key(
+        if company or title or url:
 
-            company,
+            existing_keys.add(
 
-            title,
+                create_job_key(
 
-            url
+                    company,
 
-        )
+                    title,
 
+                    url
 
-        existing_keys.add(
-            key
-        )
+                )
+
+            )
 
 
 
@@ -90,13 +127,9 @@ def filter_new_jobs(
 
     new_jobs = []
 
-
-
     duplicate_count = 0
 
 
-
-    # 检查新抓取岗位
 
     for job in jobs:
 
