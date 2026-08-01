@@ -39,8 +39,8 @@ def write_scan_log(
             success_count += 1
         else:
             failed.append(
-                item["Company"]
-            )
+    f'{item["Company"]}({item["SourceType"]}:{item.get("Error","Unknown")})'
+)
 
 
     ws_log = wb["Run_Log"]
