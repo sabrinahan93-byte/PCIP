@@ -22,3 +22,6 @@ output:
 
 logging:
   level: INFO
+report:
+
+  daily_report: output/Daily_Report.xlsx
