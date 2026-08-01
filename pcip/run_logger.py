@@ -52,9 +52,7 @@ def write_scan_log(
             len(scan_results),
             "",
             success_count,
-            ",".join(
-                list(set(failed))
-            ),
+            ",".join(list(set(failed))),
             "",
             "",
             "Completed"
