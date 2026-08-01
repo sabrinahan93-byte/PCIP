@@ -1,5 +1,5 @@
-from pcip.excel.workbook import DashboardWorkbook
 from pcip.company_loader import load_companies
+from pcip.excel.workbook import DashboardWorkbook
 
 
 def main():
@@ -10,7 +10,7 @@ def main():
 
     companies = load_companies()
 
-    dashboard.write_companies(companies)
+    dashboard.sync_companies(companies)
 
 
 if __name__ == "__main__":
