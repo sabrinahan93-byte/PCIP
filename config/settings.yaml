@@ -6,6 +6,7 @@ scan:
   timeout: 30
   retry: 2
   interval: daily
+  delay: 3
   user_agent: default
 
 match:
