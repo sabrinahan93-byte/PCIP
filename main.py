@@ -156,7 +156,7 @@ def main():
     if all_jobs:
 
 
-    new_jobs = filter_new_jobs(
+        new_jobs = filter_new_jobs(
 
         dashboard.file_path,
 
