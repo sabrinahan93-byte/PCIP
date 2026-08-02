@@ -6,7 +6,6 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.utils import get_column_letter
 
 
-
 PIPELINE_OPTIONS = [
     "New",
     "Watch",
@@ -19,7 +18,6 @@ PIPELINE_OPTIONS = [
 ]
 
 
-
 class DashboardWorkbook:
 
 
@@ -28,7 +26,6 @@ class DashboardWorkbook:
         self.file_path = (
             "output/Job_Dashboard.xlsx"
         )
-
 
 
     def initialize(self):
@@ -58,9 +55,7 @@ class DashboardWorkbook:
 
 
         ws.append(
-
             [
-
                 "Job ID",
                 "Company",
                 "Job Title",
@@ -73,33 +68,18 @@ class DashboardWorkbook:
                 "Pipeline Status",
                 "Applied Date",
                 "Notes"
-
             ]
-
         )
 
 
-        self.format_sheet(
-            ws
-        )
+        self.format_sheet(ws)
+
+        self.add_pipeline_validation(ws)
 
 
-        self.add_pipeline_validation(
-            ws
-        )
-
-
-        wb.create_sheet(
-            "Companies"
-        )
-
-        wb.create_sheet(
-            "Run_Log"
-        )
-
-        wb.create_sheet(
-            "Run_Detail"
-        )
+        wb.create_sheet("Companies")
+        wb.create_sheet("Run_Log")
+        wb.create_sheet("Run_Detail")
 
 
         wb.save(
@@ -108,16 +88,10 @@ class DashboardWorkbook:
 
 
 
-    # ==========================
-    # Excel Formatting
-    # ==========================
-
-
     def format_sheet(
         self,
         ws
     ):
-
 
         ws.freeze_panes = "A2"
 
@@ -129,11 +103,10 @@ class DashboardWorkbook:
             )
 
 
-
         for column in ws.columns:
 
 
-            length = 0
+            max_length = 0
 
 
             letter = get_column_letter(
@@ -143,20 +116,20 @@ class DashboardWorkbook:
 
             for cell in column:
 
-
                 if cell.value:
 
-                    length = max(
-                        length,
-                        len(str(cell.value))
+                    max_length = max(
+                        max_length,
+                        len(
+                            str(cell.value)
+                        )
                     )
-
 
 
             ws.column_dimensions[
                 letter
             ].width = min(
-                length + 3,
+                max_length + 3,
                 40
             )
 
@@ -193,11 +166,6 @@ class DashboardWorkbook:
             "J2:J5000"
         )
 
-
-
-    # ==========================
-    # Company Sync
-    # ==========================
 
 
     def sync_companies(
@@ -243,9 +211,7 @@ class DashboardWorkbook:
 
 
                 ws.append(
-
                     [
-
                         name,
                         company.get(
                             "Enabled",
@@ -262,22 +228,14 @@ class DashboardWorkbook:
                         "",
                         "",
                         ""
-
                     ]
-
                 )
-
 
 
         wb.save(
             self.file_path
         )
 
-
-
-    # ==========================
-    # Job Write Engine
-    # ==========================
 
 
     def write_jobs(
@@ -345,53 +303,38 @@ class DashboardWorkbook:
 
 
                 ws.append(
-
                     [
-
                         job_id,
-
                         job.get(
                             "Company",
                             ""
                         ),
-
                         job.get(
                             "Job Title",
                             ""
                         ),
-
                         job.get(
                             "Location",
                             ""
                         ),
-
                         job.get(
                             "Work Mode",
                             ""
                         ),
-
                         job.get(
                             "Match Score",
                             0
                         ),
-
                         job.get(
                             "Job URL",
                             ""
                         ),
-
                         today,
-
                         "",
-
                         "New",
-
                         "",
-
                         ""
-
                     ]
-
                 )
 
 
@@ -404,15 +347,9 @@ class DashboardWorkbook:
         )
 
 
-        self.add_pipeline_validation(
-            ws
-        )
-
-
         wb.save(
             self.file_path
         )
-
 
 
         return {
@@ -425,11 +362,6 @@ class DashboardWorkbook:
 
 
 
-    # ==========================
-    # Existing Job Update
-    # ==========================
-
-
     def update_existing_job(
         self,
         ws,
@@ -440,6 +372,7 @@ class DashboardWorkbook:
 
 
         # System fields only
+
 
         ws.cell(
             row=row,
@@ -501,19 +434,12 @@ class DashboardWorkbook:
         ).value = today
 
 
-        # IMPORTANT:
+        # NEVER TOUCH:
         #
-        # Column 10 Pipeline Status
-        # Column 11 Applied Date
-        # Column 12 Notes
-        #
-        # NEVER TOUCH
+        # Pipeline Status
+        # Applied Date
+        # Notes
 
-
-
-    # ==========================
-    # Helpers
-    # ==========================
 
 
     def build_job_index(
@@ -544,27 +470,29 @@ class DashboardWorkbook:
 
 
 
-            url = ws.cell(
-                row=row,
-                column=7
-            ).value
+            if not company or not title:
+
+                continue
 
 
 
             key = (
 
-                str(company).lower()
+                self.normalize(
+                    company
+                )
+
                 +
+
                 "|"
+
                 +
-                str(title).lower()
-                +
-                "|"
-                +
-                str(url).lower()
+
+                self.normalize(
+                    title
+                )
 
             )
-
 
 
             result[key] = row
@@ -583,12 +511,12 @@ class DashboardWorkbook:
 
         return (
 
-            str(
+            self.normalize(
                 job.get(
                     "Company",
                     ""
                 )
-            ).lower()
+            )
 
             +
 
@@ -596,25 +524,33 @@ class DashboardWorkbook:
 
             +
 
-            str(
+            self.normalize(
                 job.get(
                     "Job Title",
                     ""
                 )
-            ).lower()
+            )
 
-            +
+        )
 
-            "|"
 
-            +
 
-            str(
-                job.get(
-                    "Job URL",
-                    ""
-                )
-            ).lower()
+    def normalize(
+        self,
+        text
+    ):
+
+
+        if not text:
+
+            return ""
+
+
+        return (
+
+            str(text)
+            .lower()
+            .strip()
 
         )
 
@@ -631,12 +567,9 @@ class DashboardWorkbook:
         )
 
 
-        count = ws.max_row
-
-
         return (
 
             f"JOB-{today}-"
-            f"{count:04d}"
+            f"{ws.max_row:04d}"
 
         )
