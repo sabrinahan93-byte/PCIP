@@ -524,47 +524,33 @@ class DashboardWorkbook:
         result
     ):
 
-
         wb = load_workbook(
-
             self.file_path
-
         )
 
 
         ws = wb["Run_Log"]
 
 
-
         ws.append([
-
 
             now_sgt_str(),
 
-
             companies_scanned,
-
 
             new_jobs,
 
-
             updated_jobs,
-
 
             0,
 
-
             failed_companies,
-
 
             duration,
 
-
             result
 
-
         ])
-
 
 
         wb.save(
