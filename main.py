@@ -4,10 +4,16 @@ import csv
 
 from pcip.company_loader import load_companies
 from pcip.excel.workbook import DashboardWorkbook
+
 from pcip.scanner.career import scan_career_page
 from pcip.scanner.job_parser import extract_jobs
+
 from pcip.run_logger import write_scan_log
-from pcip.filtering.job_filter import apply_match_score
+
+from pcip.filtering.job_filter import (
+    apply_match_score,
+    is_relevant_job
+)
 
 from pcip.scanner.ats.detector import detect_ats
 
@@ -32,6 +38,7 @@ def load_sources():
 
 
     return sources
+
 
 
 
@@ -127,11 +134,10 @@ def main():
 
 
     #
-    # Release 5.3 Commit 2
-    # ATS Detection
+    # Release 5.3 ATS Detection
     #
 
-    ats_results = run_ats_detection(
+    run_ats_detection(
 
         sources
 
@@ -140,7 +146,6 @@ def main():
 
 
     scan_results = []
-
 
     all_jobs = []
 
@@ -183,22 +188,35 @@ def main():
 
         scan_record = {
 
+
             "Company":
+
                 source["Company"],
 
+
             "SourceType":
+
                 source["SourceType"],
 
+
             "URL":
+
                 source["URL"],
 
+
             "Status":
+
                 status,
 
+
             "Error":
+
                 result[0].get(
+
                     "error",
+
                     ""
+
                 )
 
         }
@@ -250,6 +268,7 @@ def main():
             for job in jobs:
 
 
+
                 job = apply_match_score(
 
                     job
@@ -257,17 +276,29 @@ def main():
                 )
 
 
-                all_jobs.append(
+
+                #
+                # Release 5.3 Lite Filtering
+                #
+
+                if is_relevant_job(
 
                     job
 
-                )
+                ):
+
+
+                    all_jobs.append(
+
+                        job
+
+                    )
 
 
 
     print(
 
-        "Total Jobs Scanned:",
+        "Relevant Jobs:",
 
         len(all_jobs)
 
@@ -283,6 +314,7 @@ def main():
             all_jobs
 
         )
+
 
 
         print(
@@ -309,7 +341,7 @@ def main():
 
         print(
 
-            "No jobs scanned"
+            "No relevant jobs found"
 
         )
 
@@ -334,6 +366,7 @@ def main():
         start_time
 
     )
+
 
 
     print(
