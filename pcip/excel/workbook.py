@@ -6,7 +6,6 @@ import os
 
 class DashboardWorkbook:
 
-
     def __init__(self):
 
         self.file_path = (
@@ -32,7 +31,12 @@ class DashboardWorkbook:
         wb = Workbook()
 
 
+        #
+        # Sheet 1 Jobs
+        #
+
         ws = wb.active
+
         ws.title = "Jobs"
 
 
@@ -55,6 +59,10 @@ class DashboardWorkbook:
 
 
 
+        #
+        # Sheet 2 Companies
+        #
+
         ws2 = wb.create_sheet(
             "Companies"
         )
@@ -74,6 +82,10 @@ class DashboardWorkbook:
 
 
 
+
+        #
+        # Sheet 3 Run_Log
+        #
 
         ws3 = wb.create_sheet(
             "Run_Log"
@@ -96,6 +108,12 @@ class DashboardWorkbook:
 
 
 
+        #
+        # Sheet 4 Run_Detail
+        #
+        # Release 5.4
+        #
+
         ws4 = wb.create_sheet(
             "Run_Detail"
         )
@@ -106,11 +124,11 @@ class DashboardWorkbook:
             "Run Time",
             "Change Type",
             "Company",
-            "Job Title",
-            "Match Score",
-            "Job URL"
+            "Job URL",
+            "Error"
 
         ])
+
 
 
 
@@ -151,21 +169,29 @@ class DashboardWorkbook:
             values_only=True
         ):
 
-            existing.add(
-                row[0]
-            )
+            if row[0]:
+
+                existing.add(
+                    row[0]
+                )
 
 
 
         for company in companies:
 
 
-            if company["Company"] not in existing:
+            company_name = company.get(
+                "Company",
+                ""
+            )
+
+
+            if company_name not in existing:
 
 
                 ws.append([
 
-                    company["Company"],
+                    company_name,
 
                     company.get(
                         "Enabled",
@@ -197,6 +223,7 @@ class DashboardWorkbook:
         )
 
 
+
     def write_jobs(
         self,
         jobs
@@ -217,6 +244,7 @@ class DashboardWorkbook:
         )
 
 
+
         existing_jobs = {}
 
 
@@ -225,8 +253,6 @@ class DashboardWorkbook:
             min_row=2
         ):
 
-            job_id = row[0].value
-
             url = row[6].value
 
 
@@ -234,9 +260,8 @@ class DashboardWorkbook:
 
                 existing_jobs[url] = {
 
-                    "row": row[0].row,
-
-                    "job_id": job_id
+                    "row":
+                        row[0].row
 
                 }
 
@@ -277,10 +302,6 @@ class DashboardWorkbook:
 
 
 
-            #
-            # Existing Job
-            #
-
             if url in existing_jobs:
 
 
@@ -288,11 +309,14 @@ class DashboardWorkbook:
 
 
 
+                #
+                # System fields update only
+                #
+
                 ws.cell(
                     row_num,
                     2
                 ).value = company
-
 
 
                 ws.cell(
@@ -301,12 +325,10 @@ class DashboardWorkbook:
                 ).value = title
 
 
-
                 ws.cell(
                     row_num,
                     6
                 ).value = score
-
 
 
                 ws.cell(
@@ -323,14 +345,12 @@ class DashboardWorkbook:
 
 
 
-            #
-            # New Job
-            #
 
             else:
 
 
                 new_count += 1
+
 
 
                 job_id = (
@@ -376,28 +396,22 @@ class DashboardWorkbook:
                         ""
                     ),
 
-
                     score,
-
 
                     url,
 
-
                     now,
 
-
                     "",
-
 
                     "New",
 
-
                     "",
-
 
                     ""
 
                 ])
+
 
 
                 change_type = "NEW"
@@ -406,30 +420,21 @@ class DashboardWorkbook:
 
 
             #
-            # Run_Detail
-            # Correct Mapping
+            # Sheet 4
+            # Job change event only
             #
 
             detail_ws.append([
 
-
                 now,
-
 
                 change_type,
 
-
                 company,
 
+                url,
 
-                title,
-
-
-                score,
-
-
-                url
-
+                ""
 
             ])
 
@@ -437,27 +442,75 @@ class DashboardWorkbook:
 
 
         wb.save(
-
             self.file_path
-
         )
 
 
 
         return {
 
-
             "new":
-
                 new_count,
 
-
             "updated":
-
                 updated_count
 
         }
 
+
+
+
+    def write_scan_failure(
+        self,
+        failures
+    ):
+
+
+        wb = load_workbook(
+            self.file_path
+        )
+
+
+        ws = wb["Run_Detail"]
+
+
+        now = datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
+
+
+        for item in failures:
+
+
+            ws.append([
+
+                now,
+
+                "SCAN_FAILED",
+
+                item.get(
+                    "Company",
+                    ""
+                ),
+
+                item.get(
+                    "URL",
+                    ""
+                ),
+
+                item.get(
+                    "Error",
+                    ""
+                )
+
+            ])
+
+
+
+        wb.save(
+            self.file_path
+        )
 
 
 
@@ -473,9 +526,7 @@ class DashboardWorkbook:
 
 
         wb = load_workbook(
-
             self.file_path
-
         )
 
 
@@ -517,7 +568,6 @@ class DashboardWorkbook:
 
 
         wb.save(
-
             self.file_path
-
         )
+        
