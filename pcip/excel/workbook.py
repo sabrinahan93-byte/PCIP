@@ -370,7 +370,6 @@ class DashboardWorkbook:
                         ws.max_row
                     ).zfill(4)
 
-                )
 
 
 
