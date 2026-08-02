@@ -1,22 +1,21 @@
 from openpyxl import Workbook, load_workbook
+from pathlib import Path
+from datetime import datetime
 from openpyxl.styles import Font
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.utils import get_column_letter
-from pathlib import Path
-from datetime import datetime
 
 
 
 PIPELINE_OPTIONS = [
-    "Observation",
+    "New",
+    "Watch",
     "Applied",
-    "Recruiter Screen",
     "Interview",
-    "Final Interview",
     "Offer",
     "Accepted",
     "Rejected",
-    "Withdrawn"
+    "Declined"
 ]
 
 
@@ -44,7 +43,6 @@ class DashboardWorkbook:
         )
 
 
-        # 已存在文件，不重新创建
         if path.exists():
 
             return
@@ -59,118 +57,49 @@ class DashboardWorkbook:
         ws.title = "Jobs"
 
 
+        ws.append(
 
-        headers = [
+            [
 
-            "Job ID",
-            "Company",
-            "Job Title",
-            "Location",
-            "Employment Type",
-            "Seniority",
-            "Posted Date",
-            "Pipeline Status",
-            "Applied Date",
-            "Job URL",
-            "Official Source",
-            "Also Found On"
+                "Job ID",
+                "Company",
+                "Job Title",
+                "Location",
+                "Work Mode",
+                "Match Score",
+                "Job URL",
+                "Last Seen",
+                "Last Notified",
+                "Pipeline Status",
+                "Applied Date",
+                "Notes"
 
-        ]
+            ]
 
-
-
-        ws.append(headers)
-
+        )
 
 
-        self._format_sheet(
+        self.format_sheet(
             ws
         )
 
 
-        self._add_pipeline_dropdown(
+        self.add_pipeline_validation(
             ws
         )
 
 
-
-        # Companies
-
-        ws_company = wb.create_sheet(
+        wb.create_sheet(
             "Companies"
         )
 
-        ws_company.append(
-
-            [
-                "Company",
-                "Tier",
-                "Enabled",
-                "Priority",
-                "Notes"
-            ]
-
-        )
-
-
-        self._format_sheet(
-            ws_company
-        )
-
-
-
-        # Run Log
-
-        ws_log = wb.create_sheet(
+        wb.create_sheet(
             "Run_Log"
         )
 
-        ws_log.append(
-
-            [
-                "Run Time",
-                "Companies Scanned",
-                "New Jobs",
-                "Updated Jobs",
-                "Closed Jobs",
-                "Failed Companies",
-                "Duration",
-                "Result"
-            ]
-
-        )
-
-
-        self._format_sheet(
-            ws_log
-        )
-
-
-
-        # Run Detail
-
-        ws_detail = wb.create_sheet(
+        wb.create_sheet(
             "Run_Detail"
         )
-
-        ws_detail.append(
-
-            [
-                "Run Time",
-                "Company",
-                "Source Type",
-                "Source URL",
-                "Status",
-                "Error Message"
-            ]
-
-        )
-
-
-        self._format_sheet(
-            ws_detail
-        )
-
 
 
         wb.save(
@@ -179,14 +108,18 @@ class DashboardWorkbook:
 
 
 
-    def _format_sheet(
+    # ==========================
+    # Excel Formatting
+    # ==========================
+
+
+    def format_sheet(
         self,
         ws
     ):
 
 
         ws.freeze_panes = "A2"
-
 
 
         for cell in ws[1]:
@@ -199,39 +132,43 @@ class DashboardWorkbook:
 
         for column in ws.columns:
 
-            max_length = 0
 
-            column_letter = get_column_letter(
+            length = 0
+
+
+            letter = get_column_letter(
                 column[0].column
             )
 
 
             for cell in column:
 
+
                 if cell.value:
 
-                    max_length = max(
-                        max_length,
+                    length = max(
+                        length,
                         len(str(cell.value))
                     )
 
 
+
             ws.column_dimensions[
-                column_letter
+                letter
             ].width = min(
-                max_length + 3,
+                length + 3,
                 40
             )
 
 
 
-    def _add_pipeline_dropdown(
+    def add_pipeline_validation(
         self,
         ws
     ):
 
 
-        validation = DataValidation(
+        dv = DataValidation(
 
             type="list",
 
@@ -248,14 +185,19 @@ class DashboardWorkbook:
 
 
         ws.add_data_validation(
-            validation
+            dv
         )
 
 
-        validation.add(
-            "H2:H5000"
+        dv.add(
+            "J2:J5000"
         )
 
+
+
+    # ==========================
+    # Company Sync
+    # ==========================
 
 
     def sync_companies(
@@ -305,26 +247,21 @@ class DashboardWorkbook:
                     [
 
                         name,
-
-                        company.get(
-                            "Tier",
-                            ""
-                        ),
-
                         company.get(
                             "Enabled",
                             ""
                         ),
-
                         company.get(
-                            "Priority",
+                            "Tier",
                             ""
                         ),
-
                         company.get(
-                            "Notes",
+                            "Career URL",
                             ""
-                        )
+                        ),
+                        "",
+                        "",
+                        ""
 
                     ]
 
@@ -332,15 +269,15 @@ class DashboardWorkbook:
 
 
 
-        self._format_sheet(
-            ws
-        )
-
-
         wb.save(
             self.file_path
         )
 
+
+
+    # ==========================
+    # Job Write Engine
+    # ==========================
 
 
     def write_jobs(
@@ -357,113 +294,349 @@ class DashboardWorkbook:
         ws = wb["Jobs"]
 
 
-        today = datetime.now().strftime(
-            "%Y%m%d"
+        existing_map = self.build_job_index(
+            ws
         )
 
 
-        counter = ws.max_row
+        today = datetime.now().strftime(
+            "%Y-%m-%d"
+        )
+
+
+        new_count = 0
+
+        updated_count = 0
 
 
 
         for job in jobs:
 
 
-            counter += 1
-
-
-            job_id = (
-
-                f"JOB-{today}-"
-                f"{counter-1:04d}"
-
+            key = self.create_key(
+                job
             )
 
 
-            ws.append(
+            if key in existing_map:
 
-                [
 
-                    job_id,
+                row = existing_map[key]
 
-                    job.get(
-                        "Company",
+
+                self.update_existing_job(
+                    ws,
+                    row,
+                    job,
+                    today
+                )
+
+
+                updated_count += 1
+
+
+
+            else:
+
+
+                job_id = self.generate_job_id(
+                    ws
+                )
+
+
+                ws.append(
+
+                    [
+
+                        job_id,
+
+                        job.get(
+                            "Company",
+                            ""
+                        ),
+
+                        job.get(
+                            "Job Title",
+                            ""
+                        ),
+
+                        job.get(
+                            "Location",
+                            ""
+                        ),
+
+                        job.get(
+                            "Work Mode",
+                            ""
+                        ),
+
+                        job.get(
+                            "Match Score",
+                            0
+                        ),
+
+                        job.get(
+                            "Job URL",
+                            ""
+                        ),
+
+                        today,
+
+                        "",
+
+                        "New",
+
+                        "",
+
                         ""
-                    ),
 
-                    job.get(
-                        "Job Title",
-                        ""
-                    ),
+                    ]
 
-                    job.get(
-                        "Location",
-                        ""
-                    ),
-
-                    job.get(
-                        "Employment Type",
-                        ""
-                    ),
-
-                    job.get(
-                        "Seniority",
-                        ""
-                    ),
-
-                    job.get(
-                        "Posted Date",
-                        ""
-                    ),
-
-                    "Observation",
-
-                    "",
-
-                    job.get(
-                        "Job URL",
-                        ""
-                    ),
-
-                    job.get(
-                        "Official Source",
-                        ""
-                    ),
-
-                    job.get(
-                        "Also Found On",
-                        ""
-                    )
-
-                ]
-
-            )
+                )
 
 
-        # Applied Date格式
-
-        for row in range(
-            2,
-            ws.max_row + 1
-        ):
-
-            ws.cell(
-                row=row,
-                column=9
-            ).number_format = "yyyy-mm-dd"
+                new_count += 1
 
 
 
-        self._format_sheet(
+        self.format_sheet(
             ws
         )
 
 
-        self._add_pipeline_dropdown(
+        self.add_pipeline_validation(
             ws
         )
 
 
         wb.save(
             self.file_path
+        )
+
+
+
+        return {
+
+            "new": new_count,
+
+            "updated": updated_count
+
+        }
+
+
+
+    # ==========================
+    # Existing Job Update
+    # ==========================
+
+
+    def update_existing_job(
+        self,
+        ws,
+        row,
+        job,
+        today
+    ):
+
+
+        # System fields only
+
+        ws.cell(
+            row=row,
+            column=2
+        ).value = job.get(
+            "Company",
+            ""
+        )
+
+
+        ws.cell(
+            row=row,
+            column=3
+        ).value = job.get(
+            "Job Title",
+            ""
+        )
+
+
+        ws.cell(
+            row=row,
+            column=4
+        ).value = job.get(
+            "Location",
+            ""
+        )
+
+
+        ws.cell(
+            row=row,
+            column=5
+        ).value = job.get(
+            "Work Mode",
+            ""
+        )
+
+
+        ws.cell(
+            row=row,
+            column=6
+        ).value = job.get(
+            "Match Score",
+            0
+        )
+
+
+        ws.cell(
+            row=row,
+            column=7
+        ).value = job.get(
+            "Job URL",
+            ""
+        )
+
+
+        ws.cell(
+            row=row,
+            column=8
+        ).value = today
+
+
+        # IMPORTANT:
+        #
+        # Column 10 Pipeline Status
+        # Column 11 Applied Date
+        # Column 12 Notes
+        #
+        # NEVER TOUCH
+
+
+
+    # ==========================
+    # Helpers
+    # ==========================
+
+
+    def build_job_index(
+        self,
+        ws
+    ):
+
+
+        result = {}
+
+
+        for row in range(
+            2,
+            ws.max_row + 1
+        ):
+
+
+            company = ws.cell(
+                row=row,
+                column=2
+            ).value
+
+
+            title = ws.cell(
+                row=row,
+                column=3
+            ).value
+
+
+
+            url = ws.cell(
+                row=row,
+                column=7
+            ).value
+
+
+
+            key = (
+
+                str(company).lower()
+                +
+                "|"
+                +
+                str(title).lower()
+                +
+                "|"
+                +
+                str(url).lower()
+
+            )
+
+
+
+            result[key] = row
+
+
+
+        return result
+
+
+
+    def create_key(
+        self,
+        job
+    ):
+
+
+        return (
+
+            str(
+                job.get(
+                    "Company",
+                    ""
+                )
+            ).lower()
+
+            +
+
+            "|"
+
+            +
+
+            str(
+                job.get(
+                    "Job Title",
+                    ""
+                )
+            ).lower()
+
+            +
+
+            "|"
+
+            +
+
+            str(
+                job.get(
+                    "Job URL",
+                    ""
+                )
+            ).lower()
+
+        )
+
+
+
+    def generate_job_id(
+        self,
+        ws
+    ):
+
+
+        today = datetime.now().strftime(
+            "%Y%m%d"
+        )
+
+
+        count = ws.max_row
+
+
+        return (
+
+            f"JOB-{today}-"
+            f"{count:04d}"
+
         )
