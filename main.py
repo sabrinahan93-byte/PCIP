@@ -1,6 +1,7 @@
 # main.py
 
 from datetime import datetime
+from pcip.utils.time import now_sgt
 import csv
 
 
@@ -125,7 +126,7 @@ def run_ats_detection(
 def main():
 
 
-    start_time = datetime.now()
+    start_time = now_sgt()
 
 
 
