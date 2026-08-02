@@ -1,51 +1,31 @@
+# pcip/run_logger.py
+
 from openpyxl import load_workbook
 from datetime import datetime
-import os
 
 
 def write_scan_log(
     file_path,
-    scan_results,
-    duration=None
+    scan_results
 ):
 
     """
-    Release 5.3 Fix
+    Release 5.4
 
-    Purpose:
-    Write scanning summary into Sheet 3 Run_Log only.
+    Only writes Sheet 3 Run_Log.
 
-    IMPORTANT:
-    This function MUST NOT write Run_Detail.
-
-    Run_Detail ownership:
+    Sheet 4 Run_Detail ownership:
     DashboardWorkbook.write_jobs()
+    DashboardWorkbook.write_scan_failure()
 
-    Run_Log ownership:
-    write_scan_log()
+    This function MUST NOT write Run_Detail.
     """
-
-
-
-    if not os.path.exists(file_path):
-
-        raise FileNotFoundError(
-            f"Dashboard file not found: {file_path}"
-        )
 
 
 
     wb = load_workbook(
         file_path
     )
-
-
-    if "Run_Log" not in wb.sheetnames:
-
-        raise Exception(
-            "Run_Log sheet missing"
-        )
-
 
 
     ws = wb["Run_Log"]
@@ -65,6 +45,12 @@ def write_scan_log(
 
 
     failed_companies = 0
+
+
+
+    new_jobs = 0
+
+    updated_jobs = 0
 
 
 
@@ -91,27 +77,21 @@ def write_scan_log(
 
 
 
-    #
-    # Run_Log only
-    #
-
     ws.append([
 
         run_time,
 
         companies_scanned,
 
-        0,          # New Jobs updated elsewhere
+        new_jobs,
 
-        0,          # Updated Jobs updated elsewhere
+        updated_jobs,
 
-        0,          # Closed Jobs
+        0,
 
         failed_companies,
 
-        duration
-        if duration
-        else "",
+        "",
 
         result
 
