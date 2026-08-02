@@ -31,12 +31,7 @@ class DashboardWorkbook:
         wb = Workbook()
 
 
-        #
-        # Sheet 1 Jobs
-        #
-
         ws = wb.active
-
         ws.title = "Jobs"
 
 
@@ -58,11 +53,6 @@ class DashboardWorkbook:
         ])
 
 
-
-        #
-        # Sheet 2 Companies
-        #
-
         ws2 = wb.create_sheet(
             "Companies"
         )
@@ -80,12 +70,6 @@ class DashboardWorkbook:
 
         ])
 
-
-
-
-        #
-        # Sheet 3 Run_Log
-        #
 
         ws3 = wb.create_sheet(
             "Run_Log"
@@ -106,14 +90,6 @@ class DashboardWorkbook:
         ])
 
 
-
-
-        #
-        # Sheet 4 Run_Detail
-        #
-        # Release 5.4
-        #
-
         ws4 = wb.create_sheet(
             "Run_Detail"
         )
@@ -131,7 +107,6 @@ class DashboardWorkbook:
 
 
 
-
         for sheet in wb:
 
             for cell in sheet[1]:
@@ -139,7 +114,6 @@ class DashboardWorkbook:
                 cell.font = Font(
                     bold=True
                 )
-
 
 
         wb.save(
@@ -174,7 +148,6 @@ class DashboardWorkbook:
                 existing.add(
                     row[0]
                 )
-
 
 
         for company in companies:
@@ -217,7 +190,6 @@ class DashboardWorkbook:
                 ])
 
 
-
         wb.save(
             self.file_path
         )
@@ -242,9 +214,7 @@ class DashboardWorkbook:
         now = now_sgt_str()
 
 
-
         existing_jobs = {}
-
 
 
         for row in ws.iter_rows(
@@ -262,7 +232,6 @@ class DashboardWorkbook:
                         row[0].row
 
                 }
-
 
 
 
@@ -306,11 +275,6 @@ class DashboardWorkbook:
                 row_num = existing_jobs[url]["row"]
 
 
-
-                #
-                # System fields update only
-                #
-
                 ws.cell(
                     row_num,
                     2
@@ -335,12 +299,10 @@ class DashboardWorkbook:
                 ).value = now
 
 
-
                 change_type = "UPDATED"
 
 
                 updated_count += 1
-
 
 
 
@@ -350,6 +312,17 @@ class DashboardWorkbook:
                 new_count += 1
 
 
+                date_id = now.replace(
+                    "-",
+                    ""
+                ).replace(
+                    ":",
+                    ""
+                ).replace(
+                    " ",
+                    ""
+                )
+
 
                 job_id = (
 
@@ -357,8 +330,7 @@ class DashboardWorkbook:
 
                     +
 
-                    now = now_sgt_str()
-                    )
+                    date_id[:8]
 
                     +
 
@@ -370,11 +342,10 @@ class DashboardWorkbook:
                         ws.max_row
                     ).zfill(4)
 
-
+                )
 
 
                 ws.append([
-
 
                     job_id,
 
@@ -409,16 +380,9 @@ class DashboardWorkbook:
                 ])
 
 
-
                 change_type = "NEW"
 
 
-
-
-            #
-            # Sheet 4
-            # Job change event only
-            #
 
             detail_ws.append([
 
@@ -436,11 +400,9 @@ class DashboardWorkbook:
 
 
 
-
         wb.save(
             self.file_path
         )
-
 
 
         return {
@@ -455,12 +417,10 @@ class DashboardWorkbook:
 
 
 
-
     def write_scan_failure(
         self,
         failures
     ):
-
 
         wb = load_workbook(
             self.file_path
@@ -470,10 +430,7 @@ class DashboardWorkbook:
         ws = wb["Run_Detail"]
 
 
-        now = datetime.now().strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
-
+        now = now_sgt_str()
 
 
         for item in failures:
@@ -503,7 +460,6 @@ class DashboardWorkbook:
             ])
 
 
-
         wb.save(
             self.file_path
         )
@@ -529,41 +485,27 @@ class DashboardWorkbook:
         ws = wb["Run_Log"]
 
 
-
         ws.append([
 
-
-            datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),
-
+            now_sgt_str(),
 
             companies_scanned,
 
-
             new_jobs,
-
 
             updated_jobs,
 
-
             0,
-
 
             failed_companies,
 
-
             duration,
-
 
             result
 
-
         ])
-
 
 
         wb.save(
             self.file_path
         )
-        
