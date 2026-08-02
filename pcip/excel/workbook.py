@@ -514,7 +514,7 @@ class DashboardWorkbook:
 
 
 
-        def write_run_log(
+    def write_run_log(
         self,
         companies_scanned,
         new_jobs,
