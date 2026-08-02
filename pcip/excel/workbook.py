@@ -7,16 +7,10 @@ from pathlib import Path
 from datetime import datetime
 
 
-PIPELINE_OPTIONS = [
-    "New",
-    "Watch",
-    "Applied",
-    "Interview",
-    "Offer",
-    "Accepted",
-    "Rejected",
-    "Declined"
-]
+
+# ===============================
+# Frozen Schema Definition
+# ===============================
 
 
 JOBS_HEADERS = [
@@ -68,7 +62,21 @@ RUN_DETAIL_HEADERS = [
 ]
 
 
+PIPELINE_OPTIONS = [
+    "New",
+    "Watch",
+    "Applied",
+    "Interview",
+    "Offer",
+    "Accepted",
+    "Rejected",
+    "Declined"
+]
+
+
+
 class DashboardWorkbook:
+
 
 
     def __init__(self):
@@ -79,9 +87,9 @@ class DashboardWorkbook:
 
 
 
-    # ============================
+    # =====================================
     # Initialize
-    # ============================
+    # =====================================
 
 
     def initialize(self):
@@ -102,8 +110,13 @@ class DashboardWorkbook:
 
         else:
 
-            self.migrate_schema()
+            self.migrate_workbook()
 
+
+
+    # =====================================
+    # Create New Workbook
+    # =====================================
 
 
     def create_workbook(self):
@@ -112,48 +125,44 @@ class DashboardWorkbook:
         wb = Workbook()
 
 
-        jobs = wb.active
+        ws = wb.active
 
-        jobs.title = "Jobs"
+        ws.title = "Jobs"
 
 
-        jobs.append(
+        ws.append(
             JOBS_HEADERS
         )
 
 
-
-        companies = wb.create_sheet(
+        company_ws = wb.create_sheet(
             "Companies"
         )
 
 
-        companies.append(
+        company_ws.append(
             COMPANIES_HEADERS
         )
 
 
-
-        run_log = wb.create_sheet(
+        log_ws = wb.create_sheet(
             "Run_Log"
         )
 
 
-        run_log.append(
+        log_ws.append(
             RUN_LOG_HEADERS
         )
 
 
-
-        run_detail = wb.create_sheet(
+        detail_ws = wb.create_sheet(
             "Run_Detail"
         )
 
 
-        run_detail.append(
+        detail_ws.append(
             RUN_DETAIL_HEADERS
         )
-
 
 
         for sheet in wb:
@@ -163,8 +172,8 @@ class DashboardWorkbook:
             )
 
 
-        self.add_pipeline_validation(
-            jobs
+        self.add_pipeline_dropdown(
+            ws
         )
 
 
@@ -174,12 +183,12 @@ class DashboardWorkbook:
 
 
 
-    # ============================
-    # Schema Migration
-    # ============================
+    # =====================================
+    # Full Workbook Migration
+    # =====================================
 
 
-    def migrate_schema(self):
+    def migrate_workbook(self):
 
 
         wb = load_workbook(
@@ -187,29 +196,36 @@ class DashboardWorkbook:
         )
 
 
-        self.migrate_jobs_sheet(
-            wb
+        self.migrate_sheet(
+            wb,
+            "Jobs",
+            JOBS_HEADERS
         )
 
 
-        self.ensure_sheet(
+        self.migrate_sheet(
             wb,
             "Companies",
             COMPANIES_HEADERS
         )
 
 
-        self.ensure_sheet(
+        self.migrate_sheet(
             wb,
             "Run_Log",
             RUN_LOG_HEADERS
         )
 
 
-        self.ensure_sheet(
+        self.migrate_sheet(
             wb,
             "Run_Detail",
             RUN_DETAIL_HEADERS
+        )
+
+
+        self.add_pipeline_dropdown(
+            wb["Jobs"]
         )
 
 
@@ -219,194 +235,29 @@ class DashboardWorkbook:
 
 
 
-    def migrate_jobs_sheet(
-        self,
-        wb
-    ):
+    # =====================================
+    # Generic Sheet Migration
+    # =====================================
 
 
-        if "Jobs" not in wb.sheetnames:
-
-
-            ws = wb.create_sheet(
-                "Jobs",
-                0
-            )
-
-
-            ws.append(
-                JOBS_HEADERS
-            )
-
-            return
-
-
-
-        ws = wb["Jobs"]
-
-
-
-        current_headers = [
-
-            cell.value
-
-            for cell in ws[1]
-
-        ]
-
-
-
-        if current_headers == JOBS_HEADERS:
-
-            return
-
-
-
-        old_rows = []
-
-
-        for row in ws.iter_rows(
-            min_row=2,
-            values_only=True
-        ):
-
-
-            old_rows.append(
-                dict(
-                    zip(
-                        current_headers,
-                        row
-                    )
-                )
-            )
-
-
-
-        index = wb.sheetnames.index(
-            "Jobs"
-        )
-
-
-        wb.remove(
-            ws
-        )
-
-
-        ws = wb.create_sheet(
-            "Jobs",
-            index
-        )
-
-
-        ws.append(
-            JOBS_HEADERS
-        )
-
-
-
-        for item in old_rows:
-
-
-            ws.append(
-
-                [
-
-                    item.get(
-                        "Job ID",
-                        ""
-                    ),
-
-                    item.get(
-                        "Company",
-                        ""
-                    ),
-
-                    item.get(
-                        "Job Title",
-                        ""
-                    ),
-
-                    item.get(
-                        "Location",
-                        ""
-                    ),
-
-                    item.get(
-                        "Work Mode",
-                        ""
-                    ),
-
-                    item.get(
-                        "Match Score",
-                        0
-                    ),
-
-                    item.get(
-                        "Job URL",
-                        ""
-                    ),
-
-                    item.get(
-                        "Last Seen",
-                        ""
-                    ),
-
-                    item.get(
-                        "Last Notified",
-                        ""
-                    ),
-
-                    item.get(
-                        "Pipeline Status",
-                        "New"
-                    ),
-
-                    item.get(
-                        "Applied Date",
-                        ""
-                    ),
-
-                    item.get(
-                        "Notes",
-                        ""
-                    )
-
-                ]
-
-            )
-
-
-        self.format_sheet(
-            ws
-        )
-
-
-        self.add_pipeline_validation(
-            ws
-        )
-            # ============================
-    # Sheet Helpers
-    # ============================
-
-
-    def ensure_sheet(
+    def migrate_sheet(
         self,
         wb,
-        name,
-        headers
+        sheet_name,
+        target_headers
     ):
 
 
-        if name not in wb.sheetnames:
+        if sheet_name not in wb.sheetnames:
 
 
             ws = wb.create_sheet(
-                name
+                sheet_name
             )
 
 
             ws.append(
-                headers
+                target_headers
             )
 
 
@@ -414,6 +265,112 @@ class DashboardWorkbook:
                 ws
             )
 
+
+            return
+
+
+
+        old_ws = wb[sheet_name]
+
+
+        old_headers = [
+
+            cell.value
+
+            for cell in old_ws[1]
+
+        ]
+
+
+
+        if old_headers == target_headers:
+
+            return
+
+
+
+        # read old data
+
+        old_records = []
+
+
+
+        for row in old_ws.iter_rows(
+
+            min_row=2,
+
+            values_only=True
+
+        ):
+
+
+            old_records.append(
+
+                dict(
+
+                    zip(
+
+                        old_headers,
+
+                        row
+
+                    )
+
+                )
+
+            )
+
+
+
+        index = wb.sheetnames.index(
+            sheet_name
+        )
+
+
+        wb.remove(
+            old_ws
+        )
+
+
+        new_ws = wb.create_sheet(
+            sheet_name,
+            index
+        )
+
+
+        new_ws.append(
+            target_headers
+        )
+
+
+        # field name based migration
+
+
+        for record in old_records:
+
+
+            new_ws.append(
+
+                [
+
+                    record.get(
+                        field,
+                        ""
+                    )
+
+                    for field in target_headers
+
+                ]
+
+            )
+
+
+        self.format_sheet(
+            new_ws
+        )
+            # =====================================
+    # Formatting
+    # =====================================
 
 
     def format_sheet(
@@ -425,6 +382,7 @@ class DashboardWorkbook:
         ws.freeze_panes = "A2"
 
 
+
         for cell in ws[1]:
 
 
@@ -433,13 +391,14 @@ class DashboardWorkbook:
             )
 
 
+
         for column in ws.columns:
 
 
-            width = 0
+            max_length = 0
 
 
-            letter = get_column_letter(
+            column_letter = get_column_letter(
                 column[0].column
             )
 
@@ -449,24 +408,39 @@ class DashboardWorkbook:
 
                 if cell.value:
 
-                    width = max(
-                        width,
+
+                    max_length = max(
+
+                        max_length,
+
                         len(
-                            str(cell.value)
+                            str(
+                                cell.value
+                            )
                         )
+
                     )
 
 
+
             ws.column_dimensions[
-                letter
+                column_letter
             ].width = min(
-                width + 3,
-                40
+
+                max_length + 3,
+
+                45
+
             )
 
 
 
-    def add_pipeline_validation(
+    # =====================================
+    # Pipeline Dropdown
+    # =====================================
+
+
+    def add_pipeline_dropdown(
         self,
         ws
     ):
@@ -476,13 +450,7 @@ class DashboardWorkbook:
 
             type="list",
 
-            formula1='"'
-            +
-            ",".join(
-                PIPELINE_OPTIONS
-            )
-            +
-            '"',
+            formula1='"New,Watch,Applied,Interview,Offer,Accepted,Rejected,Declined"',
 
             allow_blank=True
 
@@ -500,9 +468,9 @@ class DashboardWorkbook:
 
 
 
-    # ============================
+    # =====================================
     # Companies Sync
-    # ============================
+    # =====================================
 
 
     def sync_companies(
@@ -525,8 +493,11 @@ class DashboardWorkbook:
 
 
         for row in ws.iter_rows(
+
             min_row=2,
+
             values_only=True
+
         ):
 
 
@@ -547,6 +518,12 @@ class DashboardWorkbook:
             )
 
 
+            if not name:
+
+                continue
+
+
+
             if name not in existing:
 
 
@@ -558,7 +535,7 @@ class DashboardWorkbook:
 
                         company.get(
                             "Enabled",
-                            ""
+                            True
                         ),
 
                         company.get(
@@ -594,9 +571,9 @@ class DashboardWorkbook:
 
 
 
-    # ============================
-    # Job Write Engine
-    # ============================
+    # =====================================
+    # Write Jobs
+    # =====================================
 
 
     def write_jobs(
@@ -614,7 +591,7 @@ class DashboardWorkbook:
 
 
 
-        existing_map = self.build_job_index(
+        existing_jobs = self.build_job_index(
             ws
         )
 
@@ -627,7 +604,6 @@ class DashboardWorkbook:
         new_count = 0
 
         updated_count = 0
-
 
         changes = []
 
@@ -643,19 +619,24 @@ class DashboardWorkbook:
 
 
 
-            if key in existing_map:
+            if key in existing_jobs:
 
 
 
-                row = existing_map[key]
+                row = existing_jobs[key]
 
 
 
                 self.update_existing_job(
+
                     ws,
+
                     row,
+
                     job,
+
                     today
+
                 )
 
 
@@ -828,9 +809,9 @@ class DashboardWorkbook:
 
 
 
-    # ============================
+    # =====================================
     # Existing Job Update
-    # ============================
+    # =====================================
 
 
     def update_existing_job(
@@ -840,6 +821,7 @@ class DashboardWorkbook:
         job,
         today
     ):
+
 
 
         updates = {
@@ -894,27 +876,29 @@ class DashboardWorkbook:
 
 
 
-        for column, value in updates.items():
+        for col, value in updates.items():
 
 
             ws.cell(
 
                 row=row,
 
-                column=column
+                column=col
 
             ).value = value
 
 
 
-        # NEVER UPDATE:
+        # IMPORTANT:
         #
-        # Pipeline Status
-        # Applied Date
-        # Notes
-            # ============================
+        # Column 10 Pipeline Status
+        # Column 11 Applied Date
+        # Column 12 Notes
+        #
+        # NEVER TOUCH
+            # =====================================
     # Run Log
-    # ============================
+    # =====================================
 
 
     def write_run_log(
@@ -992,15 +976,21 @@ class DashboardWorkbook:
 
 
 
-    # ============================
+    # =====================================
     # Run Detail
-    # ============================
+    # =====================================
 
 
     def write_run_detail(
         self,
         changes
     ):
+
+
+        if not changes:
+
+            return
+
 
 
         wb = load_workbook(
@@ -1019,7 +1009,6 @@ class DashboardWorkbook:
 
 
         for item in changes:
-
 
 
             ws.append(
@@ -1070,9 +1059,9 @@ class DashboardWorkbook:
 
 
 
-    # ============================
-    # Job Identity
-    # ============================
+    # =====================================
+    # Build Job Index
+    # =====================================
 
 
     def build_job_index(
@@ -1081,7 +1070,7 @@ class DashboardWorkbook:
     ):
 
 
-        result = {}
+        index = {}
 
 
 
@@ -1096,15 +1085,21 @@ class DashboardWorkbook:
 
 
             company = ws.cell(
+
                 row=row,
+
                 column=2
+
             ).value
 
 
 
             title = ws.cell(
+
                 row=row,
+
                 column=3
+
             ).value
 
 
@@ -1130,13 +1125,17 @@ class DashboardWorkbook:
             )
 
 
-            result[key] = row
+            index[key] = row
 
 
 
-        return result
+        return index
 
 
+
+    # =====================================
+    # Job Key
+    # =====================================
 
 
     def create_key(
@@ -1181,9 +1180,10 @@ class DashboardWorkbook:
     ):
 
 
-        if not text:
+        if text is None:
 
             return ""
+
 
 
         return (
@@ -1198,9 +1198,9 @@ class DashboardWorkbook:
 
 
 
-    # ============================
-    # Job ID
-    # ============================
+    # =====================================
+    # Generate Job ID
+    # =====================================
 
 
     def generate_job_id(
@@ -1214,7 +1214,7 @@ class DashboardWorkbook:
         )
 
 
-        count = ws.max_row
+        number = ws.max_row
 
 
 
@@ -1233,7 +1233,7 @@ class DashboardWorkbook:
             +
 
             str(
-                count
+                number
             ).zfill(4)
 
         )
