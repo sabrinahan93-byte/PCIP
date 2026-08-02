@@ -151,7 +151,7 @@ def main():
 
 
 
-    for source in sources[:5]:
+    for source in sources:
 
 
         print(
