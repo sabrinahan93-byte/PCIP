@@ -1,3 +1,6 @@
+import csv
+from datetime import datetime
+
 from pcip.company_loader import load_companies
 from pcip.excel.workbook import DashboardWorkbook
 from pcip.scanner.career import scan_career_page
@@ -5,7 +8,7 @@ from pcip.scanner.job_parser import extract_jobs
 from pcip.run_logger import write_scan_log
 from pcip.utils.dedup import filter_new_jobs
 
-import csv
+from pcip.filtering.job_filter import apply_match_score
 
 
 
@@ -26,25 +29,37 @@ def load_sources():
 
                 sources.append(row)
 
+
     return sources
 
 
 
+
+
 def main():
+
+
+    start_time = datetime.now()
+
+
 
     dashboard = DashboardWorkbook()
 
     dashboard.initialize()
 
 
+
     companies = load_companies()
+
 
     dashboard.sync_companies(
         companies
     )
 
 
+
     sources = load_sources()
+
 
 
     scan_results = []
@@ -63,9 +78,11 @@ def main():
         )
 
 
+
         result = scan_career_page(
             source["URL"]
         )
+
 
 
         status = (
@@ -85,14 +102,18 @@ def main():
             "Company":
                 source["Company"],
 
+
             "SourceType":
                 source["SourceType"],
+
 
             "URL":
                 source["URL"],
 
+
             "Status":
                 status,
+
 
             "Error":
                 result[0].get(
@@ -103,9 +124,11 @@ def main():
         }
 
 
+
         scan_results.append(
             scan_item
         )
+
 
 
         print(
@@ -128,17 +151,45 @@ def main():
             )
 
 
+
             print(
                 "Jobs Found:",
                 len(jobs)
             )
 
 
+
+            # ==========================
+            # Release 5.2 Commit 2
+            # Apply Match Score
+            # ==========================
+
+
+            scored_jobs = []
+
+
+
+            for job in jobs:
+
+
+                job = apply_match_score(
+                    job
+                )
+
+
+                scored_jobs.append(
+                    job
+                )
+
+
+
             all_jobs.extend(
-                jobs
+                scored_jobs
             )
 
 
+
+    # Write scan detail log
 
     write_scan_log(
 
@@ -146,6 +197,13 @@ def main():
 
         scan_results
 
+    )
+
+
+
+    print(
+        "Total Jobs Scanned:",
+        len(all_jobs)
     )
 
 
@@ -162,10 +220,12 @@ def main():
         )
 
 
+
         print(
             "New Jobs:",
             len(new_jobs)
         )
+
 
 
         if new_jobs:
@@ -191,19 +251,20 @@ def main():
 
 
 
-    else:
-
-
-        print(
-            "No jobs found"
-        )
+    duration = (
+        datetime.now()
+        -
+        start_time
+    )
 
 
 
     print(
-        "Total Jobs Scanned:",
-        len(all_jobs)
+        "Duration:",
+        duration
     )
+
+
 
 
 
