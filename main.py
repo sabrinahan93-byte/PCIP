@@ -416,7 +416,7 @@ def main():
 
     duration = (
 
-        datetime.now()
+        now_sgt()
 
         -
 
