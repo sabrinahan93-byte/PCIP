@@ -208,66 +208,29 @@ def main():
 
 
 
-    if all_jobs:
+        if all_jobs:
 
 
-        new_jobs = filter_new_jobs(
-
-            dashboard.file_path,
-
+        result = dashboard.write_jobs(
             all_jobs
-
         )
-
 
 
         print(
             "New Jobs:",
-            len(new_jobs)
+            result["new"]
         )
 
 
-
-        if new_jobs:
-
-
-            dashboard.write_jobs(
-                all_jobs
-            )
+        print(
+            "Updated Jobs:",
+            result["updated"]
+        )
 
 
-            print(
-                "Jobs written:",
-                len(new_jobs)
-            )
+    else:
 
 
-        else:
-
-
-            print(
-                "No new jobs"
-            )
-
-
-
-    duration = (
-        datetime.now()
-        -
-        start_time
-    )
-
-
-
-    print(
-        "Duration:",
-        duration
-    )
-
-
-
-
-
-if __name__ == "__main__":
-
-    main()
+        print(
+            "No jobs scanned"
+        )
