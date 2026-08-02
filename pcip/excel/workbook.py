@@ -470,9 +470,7 @@ class DashboardWorkbook:
         ws = wb["Run_Detail"]
 
 
-        now = datetime.now().strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
+        now = now_sgt_str()
 
 
 
@@ -532,10 +530,9 @@ class DashboardWorkbook:
 
         ws.append([
 
+            now_sgt_str()
 
-            datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),
+        ])
 
 
             companies_scanned,
