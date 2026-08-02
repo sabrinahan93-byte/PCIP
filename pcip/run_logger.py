@@ -1,65 +1,124 @@
-from datetime import datetime
 from openpyxl import load_workbook
+from datetime import datetime
+import os
 
 
 def write_scan_log(
-        file_path,
-        scan_results
+    file_path,
+    scan_results,
+    duration=None
 ):
 
-    wb = load_workbook(file_path)
+    """
+    Release 5.3 Fix
 
-    ws_detail = wb["Run_Detail"]
+    Purpose:
+    Write scanning summary into Sheet 3 Run_Log only.
 
-    failed = []
+    IMPORTANT:
+    This function MUST NOT write Run_Detail.
 
-    success_count = 0
+    Run_Detail ownership:
+    DashboardWorkbook.write_jobs()
+
+    Run_Log ownership:
+    write_scan_log()
+    """
 
 
-    now = datetime.now().strftime(
+
+    if not os.path.exists(file_path):
+
+        raise FileNotFoundError(
+            f"Dashboard file not found: {file_path}"
+        )
+
+
+
+    wb = load_workbook(
+        file_path
+    )
+
+
+    if "Run_Log" not in wb.sheetnames:
+
+        raise Exception(
+            "Run_Log sheet missing"
+        )
+
+
+
+    ws = wb["Run_Log"]
+
+
+
+    run_time = datetime.now().strftime(
         "%Y-%m-%d %H:%M:%S"
     )
 
 
-    for item in scan_results:
 
-        ws_detail.append(
-            [
-                now,
-                item["Company"],
-                item["SourceType"],
-                item["URL"],
-                item["Status"],
-                item.get("Error", "")
-            ]
-        )
+    companies_scanned = len(
+        scan_results
+    )
 
 
-        if item["Status"] == "Success":
-            success_count += 1
-        else:
-            failed.append(
-    f'{item["Company"]}({item["SourceType"]}:{item.get("Error","Unknown")})'
-)
+
+    failed_companies = 0
 
 
-    ws_log = wb["Run_Log"]
+
+    for record in scan_results:
 
 
-    ws_log.append(
-    [
-        now,                    # Run Time
-        len(scan_results),      # Companies Scanned
-        0,                      # New Jobs
-        0,                      # Updated Jobs
-        0,                      # Closed Jobs
-        ",".join(
-            list(set(failed))
-        ),                      # Failed Companies
-        "",                     # Duration
-        "Completed"             # Result
-    ]
-)
+        if record.get(
+            "Status"
+        ) != "Success":
+
+            failed_companies += 1
 
 
-    wb.save(file_path)
+
+    result = (
+
+        "Success"
+
+        if failed_companies == 0
+
+        else "Partial"
+
+    )
+
+
+
+    #
+    # Run_Log only
+    #
+
+    ws.append([
+
+        run_time,
+
+        companies_scanned,
+
+        0,          # New Jobs updated elsewhere
+
+        0,          # Updated Jobs updated elsewhere
+
+        0,          # Closed Jobs
+
+        failed_companies,
+
+        duration
+        if duration
+        else "",
+
+        result
+
+    ])
+
+
+
+    wb.save(
+        file_path
+    )
