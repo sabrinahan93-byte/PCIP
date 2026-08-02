@@ -71,7 +71,7 @@ jobs:
           git config --global user.email "github-actions@github.com"
 
 
-          git add output/Job_Dashboard.xlsx
+          git add output/Job_Dashboard.xlsx docs/index.html
 
 
           git commit -m "Update Job Dashboard" || echo "No changes"
