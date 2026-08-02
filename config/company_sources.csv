@@ -1,6 +1,4 @@
 Company,SourceType,URL,Priority,Enabled
-Stripe_Test,Career,https://stripe.com/jobs/search,1,TRUE
-
 Stripe,Career,https://stripe.com/jobs/search,1,TRUE
 Stripe,LinkedIn,https://www.linkedin.com/company/stripe/jobs/,2,TRUE
 
