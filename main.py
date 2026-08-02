@@ -1,12 +1,12 @@
-import csv
 from datetime import datetime
+import csv
+
 
 from pcip.company_loader import load_companies
 from pcip.excel.workbook import DashboardWorkbook
 from pcip.scanner.career import scan_career_page
 from pcip.scanner.job_parser import extract_jobs
 from pcip.run_logger import write_scan_log
-from pcip.utils.dedup import filter_new_jobs
 
 from pcip.filtering.job_filter import apply_match_score
 
@@ -34,13 +34,9 @@ def load_sources():
 
 
 
-
-
 def main():
 
-
     start_time = datetime.now()
-
 
 
     dashboard = DashboardWorkbook()
@@ -63,6 +59,7 @@ def main():
 
 
     scan_results = []
+
 
     all_jobs = []
 
@@ -97,7 +94,7 @@ def main():
 
 
 
-        scan_item = {
+        scan_record = {
 
             "Company":
                 source["Company"],
@@ -126,18 +123,19 @@ def main():
 
 
         scan_results.append(
-            scan_item
+            scan_record
         )
 
 
 
         print(
-            scan_item
+            scan_record
         )
 
 
 
         if result[0]["status"] == "success":
+
 
 
             jobs = extract_jobs(
@@ -159,16 +157,6 @@ def main():
 
 
 
-            # ==========================
-            # Release 5.2 Commit 2
-            # Apply Match Score
-            # ==========================
-
-
-            scored_jobs = []
-
-
-
             for job in jobs:
 
 
@@ -177,27 +165,9 @@ def main():
                 )
 
 
-                scored_jobs.append(
+                all_jobs.append(
                     job
                 )
-
-
-
-            all_jobs.extend(
-                scored_jobs
-            )
-
-
-
-    # Write scan detail log
-
-    write_scan_log(
-
-        dashboard.file_path,
-
-        scan_results
-
-    )
 
 
 
@@ -208,12 +178,24 @@ def main():
 
 
 
-        if all_jobs:
+    #
+    # Release 5.2 Commit 3.1
+    #
+    # Workbook handles:
+    # - New Jobs
+    # - Existing Jobs Update
+    # - System fields update
+    # - Manual fields protection
+    #
+
+
+    if all_jobs:
 
 
         result = dashboard.write_jobs(
             all_jobs
         )
+
 
 
         print(
@@ -228,9 +210,46 @@ def main():
         )
 
 
+
     else:
 
 
         print(
             "No jobs scanned"
         )
+
+
+
+    write_scan_log(
+
+        dashboard.file_path,
+
+        scan_results
+
+    )
+
+
+
+    duration = (
+
+        datetime.now()
+
+        -
+
+        start_time
+
+    )
+
+
+
+    print(
+        "Duration:",
+        duration
+    )
+
+
+
+
+if __name__ == "__main__":
+
+    main()
