@@ -1,8 +1,7 @@
 # pcip/run_logger.py
 
 from openpyxl import load_workbook
-from datetime import datetime
-
+from pcip.utils.time import now_sgt_str
 
 def write_scan_log(
     file_path,
@@ -32,9 +31,7 @@ def write_scan_log(
 
 
 
-    run_time = datetime.now().strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
+    now_sgt_str()
 
 
 
