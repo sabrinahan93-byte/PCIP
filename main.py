@@ -2,6 +2,7 @@ from datetime import datetime
 import csv
 
 
+from pcip.scanner.ats.greenhouse import scan_greenhouse
 from pcip.company_loader import load_companies
 from pcip.excel.workbook import DashboardWorkbook
 from pcip.scanner.career import scan_career_page
@@ -11,6 +12,24 @@ from pcip.filtering.job_filter import apply_match_score
 
 from pcip.scanner.ats.detector import detect_ats
 
+
+for ats in ats_results:
+
+    if ats["ATS"] == "Greenhouse":
+
+        greenhouse_jobs = scan_greenhouse(
+
+            ats["ATS_URL"],
+
+            ats["Company"]
+
+        )
+
+        all_jobs.extend(
+
+            greenhouse_jobs
+
+        )
 
 
 def load_sources():
