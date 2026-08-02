@@ -1,5 +1,5 @@
 from openpyxl import load_workbook
-from datetime import datetime
+from pcip.utils.time import now_sgt_str
 
 
 def generate_html_dashboard(
@@ -61,7 +61,7 @@ def generate_html_dashboard(
 
 <head>
 
-<meta charset="UTF-8">
+<meta charset="UTF+8">
 
 <title>
 PCIP Job Dashboard
@@ -141,7 +141,7 @@ Summary
 
 <p>
 Last Update:
-{datetime.now()}
+{now_sgt_str()}
 </p>
 
 
