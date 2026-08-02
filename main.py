@@ -11,6 +11,7 @@ from pcip.scanner.career import scan_career_page
 from pcip.scanner.job_parser import extract_jobs
 
 from pcip.run_logger import write_scan_log
+from pcip.dashboard.html_report import generate_html_dashboard
 
 from pcip.filtering.job_filter import (
     apply_match_score,
@@ -435,7 +436,11 @@ def main():
         scan_results
 
     )
+    generate_html_dashboard(
 
+    dashboard.file_path
+
+)
 
 
     print(
