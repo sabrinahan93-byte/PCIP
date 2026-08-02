@@ -1,66 +1,82 @@
 MATCH_KEYWORDS = [
 
-    # Payment / Fintech
+    # Core payment
     "payment",
     "payments",
     "fintech",
     "merchant",
     "acquiring",
+    "acquirer",
     "gateway",
+    "checkout",
     "wallet",
     "card",
     "issuing",
     "issuer",
-    "checkout",
     "billing",
     "settlement",
     "remittance",
+    "cross border",
+    "cross-border",
 
 
-    # Commercial
+    # Commercial / Growth
     "partnership",
     "partner",
     "business development",
     "business",
     "commercial",
     "sales",
+    "account executive",
     "account manager",
-    "account management",
     "customer success",
     "client success",
-    "strategic account",
-    "key account",
+    "strategic",
     "enterprise",
-
-
-    # Your target functions
+    "key account",
     "channel",
     "growth",
-    "go-to-market",
     "market expansion",
-    "operations"
+    "go to market",
+    "gtm",
+
+
+    # Operations
+    "operations",
+    "program manager",
+    "project manager",
+    "implementation",
+    "solutions",
+    "merchant solution"
 
 ]
 
 
 
-HIGH_MATCH_KEYWORDS = [
+HIGH_VALUE_KEYWORDS = [
 
     "payment partnership",
-
     "payment partnerships",
-
     "merchant",
-
     "acquiring",
-
     "business development",
-
     "customer success",
-
     "strategic partnership",
+    "channel",
+    "solutions"
 
-    "channel"
+]
+
+
+
+MEDIUM_VALUE_KEYWORDS = [
+
+    "product manager",
+    "program manager",
+    "operations",
+    "account executive",
+    "enterprise",
+    "commercial"
 
 ]
 
@@ -71,19 +87,20 @@ EXCLUDE_KEYWORDS = [
     "software engineer",
     "backend engineer",
     "frontend engineer",
-    "full stack",
+    "full stack engineer",
     "developer",
     "machine learning",
     "data scientist",
     "data engineer",
     "devops",
+    "cloud engineer",
     "security engineer",
     "designer",
+    "research scientist",
+    "intern",
     "legal",
     "tax",
-    "accounting",
-    "intern",
-    "research"
+    "accounting"
 
 ]
 
@@ -110,32 +127,51 @@ def calculate_match_score(job):
 
 
 
-    for keyword in HIGH_MATCH_KEYWORDS:
+    # High value matches
+
+    for keyword in HIGH_VALUE_KEYWORDS:
 
 
         if keyword in title:
 
-            score += 25
+            score += 30
 
 
+
+    # Medium value matches
+
+    for keyword in MEDIUM_VALUE_KEYWORDS:
+
+
+        if keyword in title:
+
+            score += 15
+
+
+
+    # General payment / commercial relevance
 
     for keyword in MATCH_KEYWORDS:
 
 
         if keyword in title:
 
-            score += 10
+            score += 5
 
 
+
+    # Penalty
 
     for keyword in EXCLUDE_KEYWORDS:
 
 
         if keyword in title:
 
-            score -= 40
+            score -= 50
 
 
+
+    # Limit
 
     if score > 100:
 
@@ -182,4 +218,10 @@ def is_relevant_job(job):
     )
 
 
-    return score >= 30
+    #
+    # Release 5.3 Filtering v2
+    #
+    # Keep potential opportunities
+    #
+
+    return score >= 25
