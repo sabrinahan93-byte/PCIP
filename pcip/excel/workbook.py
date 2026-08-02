@@ -556,7 +556,7 @@ class DashboardWorkbook:
             result
 
 
-        ])
+        )
 
 
 
