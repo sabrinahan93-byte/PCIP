@@ -457,7 +457,7 @@ class DashboardWorkbook:
             "updated":
                 updated_count
 
-        )
+        }
 
 
 
