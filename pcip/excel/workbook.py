@@ -195,7 +195,9 @@ class DashboardWorkbook:
         wb.save(
             self.file_path
         )
-            def write_jobs(
+
+
+    def write_jobs(
         self,
         jobs
     ):
