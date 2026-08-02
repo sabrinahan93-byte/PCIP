@@ -1,6 +1,6 @@
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font
-from datetime import datetime
+from pcip.utils.time import now_sgt_str
 import os
 
 
@@ -239,9 +239,7 @@ class DashboardWorkbook:
         detail_ws = wb["Run_Detail"]
 
 
-        now = datetime.now().strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
+        now = now_sgt_str()
 
 
 
@@ -359,8 +357,7 @@ class DashboardWorkbook:
 
                     +
 
-                    datetime.now().strftime(
-                        "%Y%m%d"
+                    now = now_sgt_str()
                     )
 
                     +
