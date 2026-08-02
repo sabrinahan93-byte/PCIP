@@ -514,7 +514,7 @@ class DashboardWorkbook:
 
 
 
-    def write_run_log(
+        def write_run_log(
         self,
         companies_scanned,
         new_jobs,
@@ -526,7 +526,9 @@ class DashboardWorkbook:
 
 
         wb = load_workbook(
+
             self.file_path
+
         )
 
 
@@ -536,9 +538,8 @@ class DashboardWorkbook:
 
         ws.append([
 
-            now_sgt_str()
 
-        ])
+            now_sgt_str(),
 
 
             companies_scanned,
@@ -562,11 +563,12 @@ class DashboardWorkbook:
             result
 
 
-    
+        ])
 
 
 
         wb.save(
+
             self.file_path
+
         )
-        
