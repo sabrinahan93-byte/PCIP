@@ -1,3 +1,5 @@
+# main.py
+
 from datetime import datetime
 import csv
 
@@ -23,18 +25,26 @@ def load_sources():
 
     sources = []
 
+
     with open(
         "config/company_sources.csv",
         encoding="utf-8-sig"
     ) as file:
 
-        reader = csv.DictReader(file)
+
+        reader = csv.DictReader(
+            file
+        )
+
 
         for row in reader:
 
+
             if row["Enabled"].upper() == "TRUE":
 
-                sources.append(row)
+                sources.append(
+                    row
+                )
 
 
     return sources
@@ -58,30 +68,36 @@ def run_ats_detection(
 
 
         result = detect_ats(
-
             source["URL"]
-
         )
 
 
         record = {
 
+
             "Company":
+
                 source["Company"],
 
+
             "ATS":
+
                 result.get(
                     "ATS",
                     "Unknown"
                 ),
 
+
             "ATS_URL":
+
                 result.get(
                     "ATS_URL",
                     ""
                 ),
 
+
             "Confidence":
+
                 result.get(
                     "Confidence",
                     0
@@ -107,11 +123,13 @@ def run_ats_detection(
 
 def main():
 
+
     start_time = datetime.now()
 
 
 
     dashboard = DashboardWorkbook()
+
 
     dashboard.initialize()
 
@@ -122,9 +140,7 @@ def main():
 
 
     dashboard.sync_companies(
-
         companies
-
     )
 
 
@@ -134,13 +150,11 @@ def main():
 
 
     #
-    # Release 5.3 ATS Detection
+    # ATS Detection
     #
 
     run_ats_detection(
-
         sources
-
     )
 
 
@@ -151,7 +165,13 @@ def main():
 
 
 
+    #
+    # Release 5.4
+    # Remove source limit
+    #
+
     for source in sources:
+
 
 
         print(
@@ -239,60 +259,65 @@ def main():
 
 
 
-        if result[0]["status"] == "success":
+        #
+        # Scan Failed
+        #
+
+        if result[0]["status"] != "success":
+
+
+            continue
 
 
 
-            jobs = extract_jobs(
 
-                result[0]["html"],
+        jobs = extract_jobs(
 
-                source["URL"],
+            result[0]["html"],
 
-                source["Company"]
+            source["URL"],
+
+            source["Company"]
+
+        )
+
+
+
+        print(
+
+            "Jobs Found:",
+
+            len(jobs)
+
+        )
+
+
+
+        for job in jobs:
+
+
+
+            job = apply_match_score(
+
+                job
 
             )
 
 
 
-            print(
+            if is_relevant_job(
 
-                "Jobs Found:",
+                job
 
-                len(jobs)
-
-            )
+            ):
 
 
-
-            for job in jobs:
-
-
-
-                job = apply_match_score(
+                all_jobs.append(
 
                     job
 
                 )
 
-
-
-                #
-                # Release 5.3 Lite Filtering
-                #
-
-                if is_relevant_job(
-
-                    job
-
-                ):
-
-
-                    all_jobs.append(
-
-                        job
-
-                    )
 
 
 
@@ -306,6 +331,12 @@ def main():
 
 
 
+    new_jobs = 0
+
+    updated_jobs = 0
+
+
+
     if all_jobs:
 
 
@@ -316,12 +347,17 @@ def main():
         )
 
 
+        new_jobs = write_result["new"]
+
+        updated_jobs = write_result["updated"]
+
+
 
         print(
 
             "New Jobs:",
 
-            write_result["new"]
+            new_jobs
 
         )
 
@@ -330,7 +366,7 @@ def main():
 
             "Updated Jobs:",
 
-            write_result["updated"]
+            updated_jobs
 
         )
 
@@ -347,13 +383,32 @@ def main():
 
 
 
-    write_scan_log(
 
-        dashboard.file_path,
+    #
+    # Release 5.4
+    # Write failed scan events into Sheet 4
+    #
 
-        scan_results
+    failures = [
 
-    )
+        item
+
+        for item in scan_results
+
+        if item["Status"] != "Success"
+
+    ]
+
+
+
+    if failures:
+
+
+        dashboard.write_scan_failure(
+
+            failures
+
+        )
 
 
 
@@ -369,6 +424,20 @@ def main():
 
 
 
+    #
+    # Run Log
+    #
+
+    write_scan_log(
+
+        dashboard.file_path,
+
+        scan_results
+
+    )
+
+
+
     print(
 
         "Duration:",
@@ -376,6 +445,7 @@ def main():
         duration
 
     )
+
 
 
 
