@@ -351,18 +351,13 @@ class DashboardWorkbook:
 
 
 
-                now = now_sgt_str()
-
-                
                 job_id = (
 
                     "JOB-"
 
                     +
 
-                    now.replace(
-                        "-",
-                        ""
+                    now = now_sgt_str()
                     )
 
                     +
@@ -374,7 +369,6 @@ class DashboardWorkbook:
                     str(
                         ws.max_row
                     ).zfill(4)
-                )
 
 
 
@@ -476,7 +470,9 @@ class DashboardWorkbook:
         ws = wb["Run_Detail"]
 
 
-        now = now_sgt_str()
+        now = datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
 
 
 
@@ -524,6 +520,7 @@ class DashboardWorkbook:
         result
     ):
 
+
         wb = load_workbook(
             self.file_path
         )
@@ -532,29 +529,41 @@ class DashboardWorkbook:
         ws = wb["Run_Log"]
 
 
+
         ws.append([
 
-            now_sgt_str(),
+
+            datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
+
 
             companies_scanned,
 
+
             new_jobs,
+
 
             updated_jobs,
 
+
             0,
+
 
             failed_companies,
 
+
             duration,
 
+
             result
+
 
         ])
 
 
+
         wb.save(
-
             self.file_path
-
         )
+        
