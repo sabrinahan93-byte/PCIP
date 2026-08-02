@@ -11,14 +11,62 @@ Visa,LinkedIn,https://www.linkedin.com/company/visa/jobs/,2,TRUE
 Mastercard,Career,https://careers.mastercard.com/,1,TRUE
 Mastercard,LinkedIn,https://www.linkedin.com/company/mastercard/jobs/,2,TRUE
 
-Thunes,Career,https://www.thunes.com/careers/,1,TRUE
-Thunes,LinkedIn,https://www.linkedin.com/company/thunes/jobs/,2,TRUE
+PayPal,Career,https://careers.pypl.com/,1,TRUE
+PayPal,LinkedIn,https://www.linkedin.com/company/paypal/jobs/,2,TRUE
+
+Payoneer,Career,https://www.payoneer.com/careers/,1,TRUE
+Payoneer,LinkedIn,https://www.linkedin.com/company/payoneer/jobs/,2,TRUE
+
+Airwallex,Career,https://www.airwallex.com/careers,1,TRUE
+Airwallex,LinkedIn,https://www.linkedin.com/company/airwallex/jobs/,2,TRUE
+
+Nium,Career,https://www.nium.com/careers,1,TRUE
+Nium,LinkedIn,https://www.linkedin.com/company/nium/jobs/,2,TRUE
+
+Checkout.com,Career,https://www.checkout.com/careers,1,TRUE
+Checkout.com,LinkedIn,https://www.linkedin.com/company/checkout.com/jobs/,2,TRUE
 
 dLocal,Career,https://www.dlocal.com/careers/,1,TRUE
 dLocal,LinkedIn,https://www.linkedin.com/company/dlocal/jobs/,2,TRUE
 
-Payoneer,Career,https://www.payoneer.com/careers/,1,TRUE
-Payoneer,LinkedIn,https://www.linkedin.com/company/payoneer/jobs/,2,TRUE
+Nuvei,Career,https://www.nuvei.com/careers,1,TRUE
+Nuvei,LinkedIn,https://www.linkedin.com/company/nuvei/jobs/,2,TRUE
+
+Thunes,Career,https://www.thunes.com/careers/,1,TRUE
+Thunes,LinkedIn,https://www.linkedin.com/company/thunes/jobs/,2,TRUE
+
+Rapyd,Career,https://www.rapyd.net/careers/,1,TRUE
+Rapyd,LinkedIn,https://www.linkedin.com/company/rapyd/jobs/,2,TRUE
+
+Circle,Career,https://www.circle.com/careers,1,TRUE
+Circle,LinkedIn,https://www.linkedin.com/company/circle/jobs/,2,TRUE
+
+Coinbase,Career,https://www.coinbase.com/careers,1,TRUE
+Coinbase,LinkedIn,https://www.linkedin.com/company/coinbase/jobs/,2,TRUE
+
+Fireblocks,Career,https://www.fireblocks.com/careers/,1,TRUE
+Fireblocks,LinkedIn,https://www.linkedin.com/company/fireblocks/jobs/,2,TRUE
+
+Ripple,Career,https://ripple.com/careers/,1,TRUE
+Ripple,LinkedIn,https://www.linkedin.com/company/ripple/jobs/,2,TRUE
+
+Paxos,Career,https://www.paxos.com/careers/,1,TRUE
+Paxos,LinkedIn,https://www.linkedin.com/company/paxos/jobs/,2,TRUE
+
+BVNK,Career,https://www.bvnk.com/careers,1,TRUE
+BVNK,LinkedIn,https://www.linkedin.com/company/bvnk/jobs/,2,TRUE
+
+BitPay,Career,https://bitpay.com/careers/,1,TRUE
+BitPay,LinkedIn,https://www.linkedin.com/company/bitpay/jobs/,2,TRUE
+
+Alchemy Pay,Career,https://alchemypay.org/careers,1,TRUE
+Alchemy Pay,LinkedIn,https://www.linkedin.com/company/alchemy-pay/jobs/,2,TRUE
+
+Triple-A,Career,https://triple-a.io/careers/,1,TRUE
+Triple-A,LinkedIn,https://www.linkedin.com/company/triple-a-technologies/jobs/,2,TRUE
+
+StraitsX,Career,https://www.straitsx.com/careers,1,TRUE
+StraitsX,LinkedIn,https://www.linkedin.com/company/straitsx/jobs/,2,TRUE
 
 OSL,Career,https://osl.com/careers/,1,TRUE
 OSL,LinkedIn,https://www.linkedin.com/company/osl-group/jobs/,2,TRUE
@@ -29,50 +77,20 @@ Tazapay,LinkedIn,https://www.linkedin.com/company/tazapay/jobs/,2,TRUE
 Unlimit,Career,https://www.unlimit.com/careers/,1,TRUE
 Unlimit,LinkedIn,https://www.linkedin.com/company/unlimit/jobs/,2,TRUE
 
-PayPal,Career,https://careers.pypl.com/,1,TRUE
-PayPal,LinkedIn,https://www.linkedin.com/company/paypal/jobs/,2,TRUE
-
-VIVIX,Career,,1,FALSE
-VIVIX,LinkedIn,,2,FALSE
-
-MiniMax,Career,https://www.minimaxi.com/,1,TRUE
-MiniMax,LinkedIn,https://www.linkedin.com/company/minimax-ai/jobs/,2,TRUE
-
 OKX,Career,https://www.okx.com/careers,1,TRUE
 OKX,LinkedIn,https://www.linkedin.com/company/okx/jobs/,2,TRUE
 
 Gate,Career,https://www.gate.io/careers,1,TRUE
 Gate,LinkedIn,https://www.linkedin.com/company/gateio/jobs/,2,TRUE
 
-Circle,Career,https://www.circle.com/careers,1,TRUE
-Circle,LinkedIn,https://www.linkedin.com/company/circle/jobs/,2,TRUE
+Reap,Career,https://www.reap.global/careers,1,TRUE
+Reap,LinkedIn,https://www.linkedin.com/company/reap-global/jobs/,2,TRUE
 
-Coinbase,Career,https://www.coinbase.com/careers,1,TRUE
-Coinbase,LinkedIn,https://www.linkedin.com/company/coinbase/jobs/,2,TRUE
+Mesh,Career,https://www.meshconnect.com/careers,1,TRUE
+Mesh,LinkedIn,https://www.linkedin.com/company/meshconnect/jobs/,2,TRUE
 
-BVNK,Career,https://www.bvnk.com/careers,1,TRUE
-BVNK,LinkedIn,https://www.linkedin.com/company/bvnk/jobs/,2,TRUE
-
-Triple-A,Career,https://triple-a.io/careers/,1,TRUE
-Triple-A,LinkedIn,https://www.linkedin.com/company/triple-a-technologies/jobs/,2,TRUE
-
-BitPay,Career,https://bitpay.com/careers/,1,TRUE
-BitPay,LinkedIn,https://www.linkedin.com/company/bitpay/jobs/,2,TRUE
-
-Ripple,Career,https://ripple.com/careers/,1,TRUE
-Ripple,LinkedIn,https://www.linkedin.com/company/ripple/jobs/,2,TRUE
-
-Fireblocks,Career,https://www.fireblocks.com/careers/,1,TRUE
-Fireblocks,LinkedIn,https://www.linkedin.com/company/fireblocks/jobs/,2,TRUE
-
-Paxos,Career,https://www.paxos.com/careers/,1,TRUE
-Paxos,LinkedIn,https://www.linkedin.com/company/paxos/jobs/,2,TRUE
-
-Alchemy Pay,Career,https://alchemypay.org/careers,1,TRUE
-Alchemy Pay,LinkedIn,https://www.linkedin.com/company/alchemy-pay/jobs/,2,TRUE
-
-StraitsX,Career,https://www.straitsx.com/careers,1,TRUE
-StraitsX,LinkedIn,https://www.linkedin.com/company/straitsx/jobs/,2,TRUE
+MiniMax,Career,https://www.minimaxi.com/careers,1,TRUE
+MiniMax,LinkedIn,https://www.linkedin.com/company/minimax-ai/jobs/,2,TRUE
 
 Skyfire,Career,https://www.skyfire.xyz/careers,1,TRUE
 Skyfire,LinkedIn,https://www.linkedin.com/company/skyfirexyz/jobs/,2,TRUE
@@ -80,8 +98,17 @@ Skyfire,LinkedIn,https://www.linkedin.com/company/skyfirexyz/jobs/,2,TRUE
 Nevermined,Career,https://nevermined.io/careers,1,TRUE
 Nevermined,LinkedIn,https://www.linkedin.com/company/nevermined/jobs/,2,TRUE
 
-Mesh,Career,https://www.meshconnect.com/careers,1,TRUE
-Mesh,LinkedIn,https://www.linkedin.com/company/meshconnect/jobs/,2,TRUE
+OpenAI,Career,https://openai.com/careers,1,TRUE
+OpenAI,LinkedIn,https://www.linkedin.com/company/openai/jobs/,2,TRUE
 
-Reap,Career,https://www.reap.global/careers,1,TRUE
-Reap,LinkedIn,https://www.linkedin.com/company/reap-global/jobs/,2,TRUE
+Anthropic,Career,https://www.anthropic.com/careers,1,TRUE
+Anthropic,LinkedIn,https://www.linkedin.com/company/anthropic/jobs/,2,TRUE
+
+Perplexity,Career,https://www.perplexity.ai/careers,1,TRUE
+Perplexity,LinkedIn,https://www.linkedin.com/company/perplexity-ai/jobs/,2,TRUE
+
+Scale AI,Career,https://scale.com/careers,1,TRUE
+Scale AI,LinkedIn,https://www.linkedin.com/company/scaleai/jobs/,2,TRUE
+
+Wise,Career,https://wise.jobs/,1,TRUE
+Wise,LinkedIn,https://www.linkedin.com/company/wise/jobs/,2,TRUE
