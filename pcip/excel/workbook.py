@@ -351,13 +351,18 @@ class DashboardWorkbook:
 
 
 
+                now = now_sgt_str()
+
+                
                 job_id = (
 
                     "JOB-"
 
                     +
 
-                    now = now_sgt_str()
+                    now.replace(
+                        "-",
+                        ""
                     )
 
                     +
@@ -369,6 +374,7 @@ class DashboardWorkbook:
                     str(
                         ws.max_row
                     ).zfill(4)
+                )
 
 
 
