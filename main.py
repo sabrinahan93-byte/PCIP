@@ -2,7 +2,6 @@ from datetime import datetime
 import csv
 
 
-from pcip.scanner.ats.greenhouse import scan_greenhouse
 from pcip.company_loader import load_companies
 from pcip.excel.workbook import DashboardWorkbook
 from pcip.scanner.career import scan_career_page
@@ -12,24 +11,6 @@ from pcip.filtering.job_filter import apply_match_score
 
 from pcip.scanner.ats.detector import detect_ats
 
-
-for ats in ats_results:
-
-    if ats["ATS"] == "Greenhouse":
-
-        greenhouse_jobs = scan_greenhouse(
-
-            ats["ATS_URL"],
-
-            ats["Company"]
-
-        )
-
-        all_jobs.extend(
-
-            greenhouse_jobs
-
-        )
 
 
 def load_sources():
@@ -58,7 +39,6 @@ def run_ats_detection(
     sources
 ):
 
-
     print(
         "\nATS Detection Started"
     )
@@ -67,11 +47,10 @@ def run_ats_detection(
     ats_results = []
 
 
-
     for source in sources:
 
 
-        ats_result = detect_ats(
+        result = detect_ats(
 
             source["URL"]
 
@@ -84,19 +63,19 @@ def run_ats_detection(
                 source["Company"],
 
             "ATS":
-                ats_result.get(
+                result.get(
                     "ATS",
                     "Unknown"
                 ),
 
             "ATS_URL":
-                ats_result.get(
+                result.get(
                     "ATS_URL",
                     ""
                 ),
 
             "Confidence":
-                ats_result.get(
+                result.get(
                     "Confidence",
                     0
                 )
@@ -149,7 +128,7 @@ def main():
 
     #
     # Release 5.3 Commit 2
-    # ATS Detector Integration
+    # ATS Detection
     #
 
     ats_results = run_ats_detection(
@@ -204,35 +183,22 @@ def main():
 
         scan_record = {
 
-
             "Company":
-
                 source["Company"],
 
-
             "SourceType":
-
                 source["SourceType"],
 
-
             "URL":
-
                 source["URL"],
 
-
             "Status":
-
                 status,
 
-
             "Error":
-
                 result[0].get(
-
                     "error",
-
                     ""
-
                 )
 
         }
@@ -312,19 +278,18 @@ def main():
     if all_jobs:
 
 
-        result = dashboard.write_jobs(
+        write_result = dashboard.write_jobs(
 
             all_jobs
 
         )
 
 
-
         print(
 
             "New Jobs:",
 
-            result["new"]
+            write_result["new"]
 
         )
 
@@ -333,7 +298,7 @@ def main():
 
             "Updated Jobs:",
 
-            result["updated"]
+            write_result["updated"]
 
         )
 
@@ -369,7 +334,6 @@ def main():
         start_time
 
     )
-
 
 
     print(
