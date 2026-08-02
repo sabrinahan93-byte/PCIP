@@ -232,7 +232,7 @@ def main():
 
 
             dashboard.write_jobs(
-                new_jobs
+                all_jobs
             )
 
 
