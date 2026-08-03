@@ -76,7 +76,7 @@ def write_scan_log(
 
     ws.append([
 
-        run_time,
+        now_sgt_str(),
 
         companies_scanned,
 
