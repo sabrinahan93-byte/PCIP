@@ -1,11 +1,12 @@
-name: Daily Job Scan
+ame: Daily Job Scan
+
 # Production Schedule V1.0.1
 
 on:
 
   schedule:
 
-    - cron: "0 1 * * *"
+    - cron: "17 1 * * *"
 
   workflow_dispatch:
 
