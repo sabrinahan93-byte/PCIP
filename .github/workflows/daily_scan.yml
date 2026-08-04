@@ -1,15 +1,16 @@
 name: Daily Job Scan
 
-# Production Schedule V1.0.1
+# Production Schedule V1.0.2
 
 on:
 
   schedule:
 
-    - cron: "17 1 * * *"
+    # Daily 11:00 Singapore/China Time (UTC+8)
+    # GitHub Actions uses UTC
+    - cron: "0 3 * * *"
 
   workflow_dispatch:
-
 
 
 jobs:
@@ -21,11 +22,9 @@ jobs:
     runs-on: ubuntu-latest
 
 
-
     permissions:
 
       contents: write
-
 
 
     steps:
@@ -78,4 +77,4 @@ jobs:
           git commit -m "Update Job Dashboard" || echo "No changes"
 
 
-          git push
+          git push origin main
