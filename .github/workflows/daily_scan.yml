@@ -1,14 +1,14 @@
 name: Daily Job Scan
 
-# Production Schedule V1.0.2
+# Production Schedule V1.1
 
 on:
 
   schedule:
 
-    # Daily 11:00 Singapore/China Time (UTC+8)
+    # Daily 07:30 Singapore/China Time (UTC+8)
     # GitHub Actions uses UTC
-    - cron: "0 3 * * *"
+    - cron: "30 23 * * *"
 
   workflow_dispatch:
 
