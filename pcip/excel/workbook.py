@@ -228,8 +228,13 @@ class DashboardWorkbook:
 
                 existing_jobs[url] = {
 
-                    "row":
-                        row[0].row
+                    "row": row[0].row,
+
+                    "pipeline_status": row[9].value,
+
+                    "applied_date": row[10].value,
+
+                    "notes": row[11].value
 
                 }
 
