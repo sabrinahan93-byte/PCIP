@@ -303,6 +303,26 @@ class DashboardWorkbook:
                     8
                 ).value = now
 
+                
+                # Preserve manual fields
+                ws.cell(
+                    row_num,
+                    10
+                ).value = existing_jobs[url]["pipeline_status"]
+                
+
+                ws.cell(
+                    row_num,
+                    11
+                ).value = existing_jobs[url]["applied_date"]
+                
+
+                ws.cell(
+                    row_num,
+                    12
+                ).value = existing_jobs[url]["notes"]
+
+                
 
                 change_type = "UPDATED"
 
