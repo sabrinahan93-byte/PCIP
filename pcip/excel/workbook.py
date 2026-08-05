@@ -54,6 +54,29 @@ class DashboardWorkbook:
         ])
 
 
+        #
+        # Pipeline Status dropdown
+        #
+
+        pipeline_validation = DataValidation(
+            type="list",
+            formula1='"New,Watching,Applied,Interview,Rejected,Offer"',
+            allow_blank=True
+        )
+
+
+
+        ws.add_data_validation(
+            pipeline_validation
+        )
+
+
+        pipeline_validation.add(
+            "J2:J1000"
+        )
+
+
+
         ws2 = wb.create_sheet(
             "Companies"
         )
