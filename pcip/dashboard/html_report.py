@@ -12,12 +12,9 @@ def generate_html_dashboard(
         data_only=True
     )
 
-
     ws = wb["Jobs"]
 
-
     jobs = []
-
 
     for row in ws.iter_rows(
         min_row=2,
@@ -28,12 +25,14 @@ def generate_html_dashboard(
 
             jobs.append({
 
+                "job_id": row[0],
                 "company": row[1],
                 "title": row[2],
-                "location": row[3],
                 "score": row[5],
                 "url": row[6],
-                "status": row[9]
+                "status": row[9] or "",
+                "applied_date": row[10] or "",
+                "notes": row[11] or ""
 
             })
 
@@ -52,7 +51,6 @@ def generate_html_dashboard(
     ]
 
 
-
     html = f"""
 
 <!DOCTYPE html>
@@ -61,7 +59,7 @@ def generate_html_dashboard(
 
 <head>
 
-<meta charset="UTF+8">
+<meta charset="UTF-8">
 
 <title>
 PCIP Job Dashboard
@@ -109,12 +107,25 @@ padding:10px;
 
 border-bottom:1px solid #ddd;
 
+text-align:left;
+
 }}
 
 
 .score {{
 
 font-weight:bold;
+
+}}
+
+
+input, select {{
+
+padding:8px;
+
+margin-right:10px;
+
+margin-bottom:15px;
 
 }}
 
@@ -169,7 +180,67 @@ Match Score >=75
 </h2>
 
 
-<table>
+<input 
+type="text"
+id="search"
+placeholder="Search Job ID / Company / Title"
+onkeyup="filterTable()"
+>
+
+
+<select id="scoreFilter" onchange="filterTable()">
+
+<option value="all">
+All Scores
+</option>
+
+<option value="75">
+>=75
+</option>
+
+<option value="85">
+>=85
+</option>
+
+<option value="90">
+>=90
+</option>
+
+</select>
+
+
+
+<select id="statusFilter" onchange="filterTable()">
+
+<option value="all">
+All Status
+</option>
+
+<option value="To Review">
+To Review
+</option>
+
+<option value="Applied">
+Applied
+</option>
+
+<option value="Interview">
+Interview
+</option>
+
+<option value="Rejected">
+Rejected
+</option>
+
+<option value="Offer">
+Offer
+</option>
+
+</select>
+
+
+
+<table id="jobTable">
 
 
 <tr>
@@ -187,61 +258,68 @@ Job Title
 </th>
 
 <th>
-Location
+Pipeline Status
+</th>
+
+<th>
+Applied Date
+</th>
+
+<th>
+Notes
 </th>
 
 <th>
 Link
 </th>
 
-
 </tr>
-
 
 """
 
 
     for job in high_match:
 
-
         html += f"""
 
 <tr>
 
 <td class="score">
-
 {job['score']}
-
 </td>
 
 
 <td>
-
 {job['company']}
-
 </td>
 
 
 <td>
-
 {job['title']}
-
+<br>
+<small>{job['job_id']}</small>
 </td>
 
 
 <td>
+{job['status']}
+</td>
 
-{job['location']}
 
+<td>
+{job['applied_date']}
+</td>
+
+
+<td>
+{job['notes']}
 </td>
 
 
 <td>
 
 <a href="{job['url']}">
-
 Open
-
 </a>
 
 </td>
@@ -258,6 +336,103 @@ Open
 
 
 </div>
+
+
+<script>
+
+
+function filterTable() {
+
+
+let search =
+document.getElementById("search").value.toLowerCase();
+
+
+let scoreFilter =
+document.getElementById("scoreFilter").value;
+
+
+let statusFilter =
+document.getElementById("statusFilter").value;
+
+
+let table =
+document.getElementById("jobTable");
+
+
+let rows =
+table.getElementsByTagName("tr");
+
+
+
+for (let i = 1; i < rows.length; i++) {
+
+
+let row =
+rows[i];
+
+
+let text =
+row.innerText.toLowerCase();
+
+
+let score =
+parseInt(row.cells[0].innerText);
+
+
+let status =
+row.cells[3].innerText;
+
+
+
+let matchSearch =
+text.includes(search);
+
+
+let matchScore =
+scoreFilter === "all"
+||
+score >= parseInt(scoreFilter);
+
+
+
+let matchStatus =
+statusFilter === "all"
+||
+status === statusFilter;
+
+
+
+if (
+matchSearch
+&&
+matchScore
+&&
+matchStatus
+)
+
+{
+
+row.style.display="";
+
+}
+
+else
+
+{
+
+row.style.display="none";
+
+}
+
+
+}
+
+
+}
+
+
+</script>
 
 
 </body>

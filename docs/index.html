@@ -6,7 +6,7 @@
 
 <head>
 
-<meta charset="UTF+8">
+<meta charset="UTF-8">
 
 <title>
 PCIP Job Dashboard
@@ -54,12 +54,25 @@ padding:10px;
 
 border-bottom:1px solid #ddd;
 
+text-align:left;
+
 }
 
 
 .score {
 
 font-weight:bold;
+
+}
+
+
+input, select {
+
+padding:8px;
+
+margin-right:10px;
+
+margin-bottom:15px;
 
 }
 
@@ -86,19 +99,19 @@ Summary
 
 <p>
 Last Update:
-2026-08-06 15:27:30
+2026-08-06 17:23:42
 </p>
 
 
 <p>
 Total Jobs:
-205
+227
 </p>
 
 
 <p>
 High Match Jobs:
-11
+13
 </p>
 
 
@@ -114,7 +127,67 @@ Match Score >=75
 </h2>
 
 
-<table>
+<input 
+type="text"
+id="search"
+placeholder="Search Job ID / Company / Title"
+onkeyup="filterTable()"
+>
+
+
+<select id="scoreFilter" onchange="filterTable()">
+
+<option value="all">
+All Scores
+</option>
+
+<option value="75">
+>=75
+</option>
+
+<option value="85">
+>=85
+</option>
+
+<option value="90">
+>=90
+</option>
+
+</select>
+
+
+
+<select id="statusFilter" onchange="filterTable()">
+
+<option value="all">
+All Status
+</option>
+
+<option value="To Review">
+To Review
+</option>
+
+<option value="Applied">
+Applied
+</option>
+
+<option value="Interview">
+Interview
+</option>
+
+<option value="Rejected">
+Rejected
+</option>
+
+<option value="Offer">
+Offer
+</option>
+
+</select>
+
+
+
+<table id="jobTable">
 
 
 <tr>
@@ -132,45 +205,55 @@ Job Title
 </th>
 
 <th>
-Location
+Pipeline Status
+</th>
+
+<th>
+Applied Date
+</th>
+
+<th>
+Notes
 </th>
 
 <th>
 Link
 </th>
 
-
 </tr>
-
 
 
 
 <tr>
 
 <td class="score">
-
 90
-
 </td>
 
 
 <td>
-
 Airwallex
-
 </td>
 
 
 <td>
-
 Senior Manager, Financial Partnerships, Card Issuing & Acquiring, EMEAFinancial and Strategic PartnershipsLondon
+<br>
+<small>JOB-20260802-0116</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -178,9 +261,7 @@ None
 <td>
 
 <a href="https://careers.airwallex.com/job/0041178d-9b99-4c6e-9ad0-d8399d77559f/senior-manager-financial-partnerships-card-issuing-acquiring-emea/">
-
 Open
-
 </a>
 
 </td>
@@ -193,29 +274,33 @@ Open
 <tr>
 
 <td class="score">
-
 85
-
 </td>
 
 
 <td>
-
 Nuvei
-
 </td>
 
 
 <td>
-
 Issuing|Nuveinuvei.com/solutions/issuingDiscover Nuvei's seamless issuing payment solutions, including customizable physical and virtual cards, unified acquiring and issuing, and data-driven insights.
+<br>
+<small>JOB-20260802-0069</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -223,9 +308,7 @@ None
 <td>
 
 <a href="https://www.nuvei.com/solutions/issuing">
-
 Open
-
 </a>
 
 </td>
@@ -238,29 +321,33 @@ Open
 <tr>
 
 <td class="score">
-
 85
-
 </td>
 
 
 <td>
-
 Mastercard
-
 </td>
 
 
 <td>
-
 Director, Strategic Partnership Sales, Media Solutions
+<br>
+<small>JOB-20260805-0152</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -268,9 +355,7 @@ None
 <td>
 
 <a href="https://www.linkedin.com/jobs/view/director-strategic-partnership-sales-media-solutions-at-mastercard-4446690991?refId=KMrOAER7vxfM9upDMLh0kQ%3D%3D&trackingId=PQtHyxKQ0tFICy%2FH0MsVEQ%3D%3D">
-
 Open
-
 </a>
 
 </td>
@@ -283,29 +368,33 @@ Open
 <tr>
 
 <td class="score">
-
 85
-
 </td>
 
 
 <td>
-
 Mastercard
-
 </td>
 
 
 <td>
-
 Director, Strategic Partnership Sales, Media Solutions
+<br>
+<small>JOB-20260805-0162</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -313,9 +402,7 @@ None
 <td>
 
 <a href="https://www.linkedin.com/jobs/view/director-strategic-partnership-sales-media-solutions-at-mastercard-4447302630?refId=jh2%2FtOAiDmvdFmXVMQLwUQ%3D%3D&trackingId=cHuOlN6FX77m3P5TFWliBA%3D%3D">
-
 Open
-
 </a>
 
 </td>
@@ -328,29 +415,33 @@ Open
 <tr>
 
 <td class="score">
-
 75
-
 </td>
 
 
 <td>
-
 Adyen
-
 </td>
 
 
 <td>
-
 Payment Partnerships Lead
+<br>
+<small>JOB-20260802-0009</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -358,9 +449,7 @@ None
 <td>
 
 <a href="https://in.linkedin.com/jobs/view/payment-partnerships-lead-at-adyen-4390163388?refId=7JaqZxOl8lSJ0GqLf13PLA%3D%3D&trackingId=gCRySuqkgmM4j5ngCFyNSg%3D%3D">
-
 Open
-
 </a>
 
 </td>
@@ -373,29 +462,33 @@ Open
 <tr>
 
 <td class="score">
-
 75
-
 </td>
 
 
 <td>
-
 Adyen
-
 </td>
 
 
 <td>
-
 Payment Partnerships Lead
+<br>
+<small>JOB-20260802-0043</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -403,9 +496,7 @@ None
 <td>
 
 <a href="https://in.linkedin.com/jobs/view/payment-partnerships-lead-at-adyen-4390163388?refId=z6prmF151YCLJu%2Bpqgk4Ww%3D%3D&trackingId=J%2F76bvAFbwwck3WTMjUfBg%3D%3D">
-
 Open
-
 </a>
 
 </td>
@@ -418,29 +509,33 @@ Open
 <tr>
 
 <td class="score">
-
 75
-
 </td>
 
 
 <td>
-
 Nuvei
-
 </td>
 
 
 <td>
-
 Pay-insOmnichannel payment solutions
+<br>
+<small>JOB-20260802-0060</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -448,9 +543,7 @@ None
 <td>
 
 <a href="https://www.nuvei.com/payment-solution">
-
 Open
-
 </a>
 
 </td>
@@ -463,29 +556,33 @@ Open
 <tr>
 
 <td class="score">
-
 75
-
 </td>
 
 
 <td>
-
 Nuvei
-
 </td>
 
 
 <td>
-
 Authorization optimization|Nuveinuvei.com/solutions/authorization-optimizationOptimize payment authorizations across every channel. Boost your approval rates by up to 5 points, reduce declines, and recover revenue with intelligent routing and retry.
+<br>
+<small>JOB-20260802-0078</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -493,9 +590,7 @@ None
 <td>
 
 <a href="https://www.nuvei.com/solutions/authorization-optimization">
-
 Open
-
 </a>
 
 </td>
@@ -508,29 +603,33 @@ Open
 <tr>
 
 <td class="score">
-
 75
-
 </td>
 
 
 <td>
-
 Adyen
-
 </td>
 
 
 <td>
-
 Payment Partnerships Lead
+<br>
+<small>JOB-20260802-0111</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -538,9 +637,7 @@ None
 <td>
 
 <a href="https://in.linkedin.com/jobs/view/payment-partnerships-lead-at-adyen-4390163388?refId=ptP4cpGWzFa%2Bn7f5jTwgLw%3D%3D&trackingId=QsxGJBjHr1dfnyHmr%2BH%2BNw%3D%3D">
-
 Open
-
 </a>
 
 </td>
@@ -553,29 +650,33 @@ Open
 <tr>
 
 <td class="score">
-
 75
-
 </td>
 
 
 <td>
-
 Adyen
-
 </td>
 
 
 <td>
-
 Payment Partnerships Lead
+<br>
+<small>JOB-20260803-0125</small>
+</td>
 
+
+<td>
+New
 </td>
 
 
 <td>
 
-None
+</td>
+
+
+<td>
 
 </td>
 
@@ -583,9 +684,7 @@ None
 <td>
 
 <a href="https://in.linkedin.com/jobs/view/payment-partnerships-lead-at-adyen-4390163388?refId=NtLjJFx3hp%2FmiXGvhPsE%2BQ%3D%3D&trackingId=JlMhf2ejL%2BpeBk%2BJP866MA%3D%3D">
-
 Open
-
 </a>
 
 </td>
@@ -598,39 +697,135 @@ Open
 <tr>
 
 <td class="score">
-
 75
-
 </td>
 
 
 <td>
-
 Stripe
-
 </td>
 
 
 <td>
-
 Program Manager, Commercial Solutions
+<br>
+<small>JOB-20260806-0193</small>
+</td>
+
+
+<td>
+New
+</td>
+
+
+<td>
 
 </td>
 
 
 <td>
 
-None
-
 </td>
 
 
 <td>
 
-<a href="https://mx.linkedin.com/jobs/view/program-manager-commercial-solutions-at-stripe-4425913167?refId=IqnME5eqxbif9wXh8SQYbg%3D%3D&trackingId=udGBYOX4ud%2BrrifksCBt2w%3D%3D">
-
+<a href="https://mx.linkedin.com/jobs/view/program-manager-commercial-solutions-at-stripe-4425913167?refId=TaZqHcpIOQ9OejzdVvgcSQ%3D%3D&trackingId=N8obzet0IS2NiT5dNqscYw%3D%3D">
 Open
+</a>
 
+</td>
+
+
+</tr>
+
+
+
+<tr>
+
+<td class="score">
+75
+</td>
+
+
+<td>
+Stripe
+</td>
+
+
+<td>
+Program Manager, Commercial Solutions
+<br>
+<small>JOB-20260806-0203</small>
+</td>
+
+
+<td>
+Applied
+</td>
+
+
+<td>
+2026-08-06 00:00:00
+</td>
+
+
+<td>
+test
+</td>
+
+
+<td>
+
+<a href="https://mx.linkedin.com/jobs/view/program-manager-commercial-solutions-at-stripe-4425913167?refId=qaoECyjSQQ%2FR2fOWxjTPFA%3D%3D&trackingId=TKgG8RBffmQ1EIKmz7f5xA%3D%3D">
+Open
+</a>
+
+</td>
+
+
+</tr>
+
+
+
+<tr>
+
+<td class="score">
+75
+</td>
+
+
+<td>
+Stripe
+</td>
+
+
+<td>
+Program Manager, Commercial Solutions
+<br>
+<small>JOB-20260806-0216</small>
+</td>
+
+
+<td>
+New
+</td>
+
+
+<td>
+
+</td>
+
+
+<td>
+
+</td>
+
+
+<td>
+
+<a href="https://mx.linkedin.com/jobs/view/program-manager-commercial-solutions-at-stripe-4425913167?refId=%2Bdyox2Xxoya8H1os%2BJqr%2Bg%3D%3D&trackingId=TWU%2FE1Gu57Xywn4UfRn0ng%3D%3D">
+Open
 </a>
 
 </td>
@@ -644,6 +839,103 @@ Open
 
 
 </div>
+
+
+<script>
+
+
+function filterTable() {
+
+
+let search =
+document.getElementById("search").value.toLowerCase();
+
+
+let scoreFilter =
+document.getElementById("scoreFilter").value;
+
+
+let statusFilter =
+document.getElementById("statusFilter").value;
+
+
+let table =
+document.getElementById("jobTable");
+
+
+let rows =
+table.getElementsByTagName("tr");
+
+
+
+for (let i = 1; i < rows.length; i++) {
+
+
+let row =
+rows[i];
+
+
+let text =
+row.innerText.toLowerCase();
+
+
+let score =
+parseInt(row.cells[0].innerText);
+
+
+let status =
+row.cells[3].innerText;
+
+
+
+let matchSearch =
+text.includes(search);
+
+
+let matchScore =
+scoreFilter === "all"
+||
+score >= parseInt(scoreFilter);
+
+
+
+let matchStatus =
+statusFilter === "all"
+||
+status === statusFilter;
+
+
+
+if (
+matchSearch
+&&
+matchScore
+&&
+matchStatus
+)
+
+{
+
+row.style.display="";
+
+}
+
+else
+
+{
+
+row.style.display="none";
+
+}
+
+
+}
+
+
+}
+
+
+</script>
 
 
 </body>
