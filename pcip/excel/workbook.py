@@ -143,7 +143,52 @@ class DashboardWorkbook:
         wb.save(
             self.file_path
         )
+    # ==============================
+    # Ensure Excel Pipeline Status dropdown exists
+    # ==============================
 
+    def ensure_pipeline_validation(
+        self,
+        wb
+    ):
+
+
+        ws = wb["Jobs"]
+
+
+        has_validation = False
+
+
+        for dv in ws.data_validations.dataValidation:
+
+            if (
+                dv.type == "list"
+                and "J2:J1000" in str(dv.sqref)
+            ):
+
+                has_validation = True
+
+
+        if not has_validation:
+
+
+            pipeline_validation = DataValidation(
+                type="list",
+                formula1='"New,Watching,Applied,Interview,Rejected,Offer"',
+                allow_blank=True
+            )
+
+
+            ws.add_data_validation(
+                pipeline_validation
+            )
+
+
+            pipeline_validation.add(
+                "J2:J1000"
+            )
+
+    
 
 
     def sync_companies(
@@ -153,6 +198,10 @@ class DashboardWorkbook:
 
         wb = load_workbook(
             self.file_path
+        )
+
+        self.ensure_pipeline_validation(
+            wb
         )
 
 
@@ -227,6 +276,10 @@ class DashboardWorkbook:
 
         wb = load_workbook(
             self.file_path
+        )
+
+        self.ensure_pipeline_validation(
+            wb
         )
 
 
@@ -475,6 +528,10 @@ class DashboardWorkbook:
             self.file_path
         )
 
+        self.ensure_pipeline_validation(
+            wb
+        )
+
 
         ws = wb["Run_Detail"]
 
@@ -528,6 +585,10 @@ class DashboardWorkbook:
 
         wb = load_workbook(
             self.file_path
+        )
+
+        self.ensure_pipeline_validation(
+            wb
         )
 
 
