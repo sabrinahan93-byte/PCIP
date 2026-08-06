@@ -1,0 +1,46 @@
+name: Excel Sync
+
+on:
+  push:
+    paths:
+      - "output/update_queue.json"
+
+jobs:
+
+  update-excel:
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+
+      - name: Install dependencies
+        run: |
+          pip install openpyxl
+
+
+      - name: Update Excel
+        run: |
+          python pcip/dashboard/update_excel.py
+
+
+      - name: Commit Excel update
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/Job_Dashboard.xlsx
+
+          git commit -m "Auto update Job Dashboard" || echo "No changes"
+
+          git push
