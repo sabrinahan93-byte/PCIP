@@ -143,6 +143,35 @@ PCIP Daily Job Dashboard
 </h1>
 
 
+
+<div class="card">
+
+<h2>
+GitHub Settings
+</h2>
+
+
+<input
+type="password"
+id="githubToken"
+placeholder="Enter GitHub Token"
+>
+
+
+<button onclick="saveToken()">
+Save Token
+</button>
+
+<br>
+
+
+<button onclick="testGitHubConnection()">
+Test GitHub Connection
+</button>
+
+</div>
+
+
 <div class="card">
 
 <h2>
@@ -302,17 +331,59 @@ Link
 
 
 <td>
+
+<select
+class="status-edit"
+data-job-id="{job['job_id']}"
+>
+
+<option>
 {job['status']}
+</option>
+
+<option>
+To Review
+</option>
+
+<option>
+Applied
+</option>
+
+<option>
+Interview
+</option>
+
+<option>
+Rejected
+</option>
+
+<option>
+Offer
+</option>
+
+</select>
+
 </td>
 
 
 <td>
-{job['applied_date']}
+
+<input
+class="date-edit"
+data-job-id="{job['job_id']}"
+value="{job['applied_date']}"
+>
+
 </td>
 
 
 <td>
-{job['notes']}
+
+<textarea
+class="notes-edit"
+data-job-id="{job['job_id']}"
+>{job['notes']}</textarea>
+
 </td>
 
 
@@ -324,6 +395,16 @@ Open
 
 </td>
 
+
+<td>
+
+<button
+class="save-btn"
+data-job-id="{job['job_id']}"
+>
+Save
+</button>
+</td>
 
 </tr>
 
@@ -339,6 +420,113 @@ Open
 
 
 <script>
+
+const githubOwner = "sabrinahan93-byte";
+const githubRepo = "PCIP";
+const githubBranch = "main";
+const githubFile = "output/update_queue.json";
+
+
+
+function saveToken() {
+
+    let token =
+    document.getElementById("githubToken").value;
+
+
+    localStorage.setItem(
+        "pcip_token",
+        token
+    );
+
+
+    alert(
+        "Token saved locally"
+    );
+
+}
+
+async function testGitHubConnection(){
+
+
+    let token =
+    localStorage.getItem(
+    "pcip_token"
+    );
+
+
+    if (!token){
+
+        alert("No Token");
+
+        return;
+
+    }
+
+    alert(
+    "Token exists"
+    );
+
+
+    let url =
+    "https://api.github.com/repos/"
+    +
+    githubOwner
+    +
+    "/"
+    +
+    githubRepo
+    +
+    "/contents/"
+    +
+    githubFile
+    +
+    "?ref="
+    +
+    githubBranch;
+
+
+    let response =
+    await fetch(
+        url,
+        {
+            headers:{
+                "Authorization":
+                "Bearer "
+                +
+                token
+            }
+        }
+    );
+
+
+    if(response.ok){
+
+        let data =
+        await response.json();
+
+
+        alert(
+        "GitHub Connection OK | File size: "
+        +
+        data.size
+        );
+
+
+    }
+    else{
+
+        alert(
+        "GitHub API Error: "
+        +
+        response.status
+        );
+
+    }
+
+}
+
+    
 
 
 function filterTable() {
@@ -364,66 +552,9 @@ let rows =
 table.getElementsByTagName("tr");
 
 
-
 for (let i = 1; i < rows.length; i++) {
 
-
-let row =
-rows[i];
-
-
-let text =
-row.innerText.toLowerCase();
-
-
-let score =
-parseInt(row.cells[0].innerText);
-
-
-let status =
-row.cells[3].innerText;
-
-
-
-let matchSearch =
-text.includes(search);
-
-
-let matchScore =
-scoreFilter === "all"
-||
-score >= parseInt(scoreFilter);
-
-
-
-let matchStatus =
-statusFilter === "all"
-||
-status === statusFilter;
-
-
-
-if (
-matchSearch
-&&
-matchScore
-&&
-matchStatus
-)
-
-{
-
-row.style.display="";
-
-}
-
-else
-
-{
-
-row.style.display="none";
-
-}
+    let row = rows[i];
 
 
 }
@@ -431,6 +562,170 @@ row.style.display="none";
 
 }
 
+
+// Save button test
+
+// Save button
+
+document.querySelectorAll(".save-btn")
+.forEach(button => {
+
+    button.onclick = function(){
+
+
+        let jobId = this.dataset.jobId;
+
+
+        let status =
+        document.querySelector(
+        '.status-edit[data-job-id="' + jobId + '"]'
+        ).value;
+
+
+        let appliedDate =
+        document.querySelector(
+        '.date-edit[data-job-id="' + jobId + '"]'
+        ).value;
+
+
+        let notes =
+        document.querySelector(
+        '.notes-edit[data-job-id="' + jobId + '"]'
+        ).value;
+
+
+        let token =
+        localStorage.getItem(
+        "pcip_token"
+        );
+
+
+
+        if (!token){
+
+            alert(
+            "Please save GitHub Token first"
+            );
+
+            return;
+
+        }
+
+
+
+
+        alert(
+        "Ready to update | "
+        +
+        "Job ID: "
+        +
+        jobId
+        +
+        " | Status: "
+        +
+        status
+        +
+        " | Date: "
+        +
+        appliedDate
+        +
+        " | Notes: "
+        +
+        notes
+        );
+        console.log({
+        job_id: jobId,
+        status: status,
+        applied_date: appliedDate,
+        notes: notes
+});
+        let updateData = {
+            job_id: jobId,
+            status: status,
+            applied_date: appliedDate,
+            notes: notes,
+            updated_at: new Date().toISOString()
+};
+
+
+        console.log(
+            "Update Request:",
+            updateData
+);
+
+
+        let content =
+        btoa(
+        JSON.stringify(updateData)
+);
+
+
+        let url =
+        "https://api.github.com/repos/"
+        +
+        githubOwner
+        +
+        "/"
+        +
+        githubRepo
+        +
+        "/contents/"
+        +
+        githubFile;
+
+
+
+        fetch(
+            url,
+            {
+                method:"PUT",
+
+                headers:{
+                    "Authorization":
+                    "Bearer "
+                    +
+                    token,
+
+                    "Accept":
+                    "application/vnd.github+json"
+                },
+
+                body:JSON.stringify({
+
+                    message:
+                    "Update dashboard request",
+
+                    content:
+                    content
+
+                })
+
+            }
+
+    )
+    .then(
+        response => response.json()
+    )
+
+    .then(
+        data => {
+
+           console.log(
+               "GitHub update result:",
+               data
+            );
+
+           alert(
+               "Update request uploaded"
+            );
+
+        }
+
+    );
+
+    };
+
+});
 
 </script>
 
