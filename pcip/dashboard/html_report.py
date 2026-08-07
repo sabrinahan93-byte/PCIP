@@ -342,7 +342,11 @@ data-job-id="{job['job_id']}"
 </option>
 
 <option>
-To Review
+New
+</option>
+
+<option>
+Watching
 </option>
 
 <option>
