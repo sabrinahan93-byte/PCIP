@@ -128,13 +128,13 @@ Summary
 
 <p>
 Last Update:
-2026-08-07 13:43:31
+2026-08-07 14:23:10
 </p>
 
 
 <p>
 Total Jobs:
-220
+216
 </p>
 
 
@@ -577,7 +577,7 @@ data-job-id="JOB-20260805-0162"
 >
 
 <option>
-To Review
+New
 </option>
 
 <option>
@@ -610,7 +610,7 @@ Offer
 <input
 class="date-edit"
 data-job-id="JOB-20260805-0162"
-value="2026-08-07"
+value=""
 >
 
 </td>
@@ -621,7 +621,7 @@ value="2026-08-07"
 <textarea
 class="notes-edit"
 data-job-id="JOB-20260805-0162"
->final sync test</textarea>
+></textarea>
 
 </td>
 
@@ -1361,14 +1361,11 @@ async function testGitHubConnection(){
 
 function filterTable() {
 
-
 let search =
 document.getElementById("search").value.toLowerCase();
 
-
 let scoreFilter =
 document.getElementById("scoreFilter").value;
-
 
 let statusFilter =
 document.getElementById("statusFilter").value;
@@ -1386,9 +1383,55 @@ for (let i = 1; i < rows.length; i++) {
 
     let row = rows[i];
 
+    let score =
+    row.cells[0].innerText;
+
+    let company =
+    row.cells[1].innerText.toLowerCase();
+
+    let title =
+    row.cells[2].innerText.toLowerCase();
+
+    let status =
+    row.cells[3].querySelector("select").value;
+
+
+    let matchSearch =
+    company.includes(search)
+    ||
+    title.includes(search);
+
+
+    let matchScore =
+    scoreFilter === ""
+    ||
+    parseInt(score) >= parseInt(scoreFilter);
+
+
+    let matchStatus =
+    statusFilter === ""
+    ||
+    status === statusFilter;
+
+
+    if(
+        matchSearch
+        &&
+        matchScore
+        &&
+        matchStatus
+    ){
+
+        row.style.display = "";
+
+    }
+    else{
+
+        row.style.display = "none";
+
+    }
 
 }
-
 
 }
 

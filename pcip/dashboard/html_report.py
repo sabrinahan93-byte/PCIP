@@ -531,14 +531,11 @@ async function testGitHubConnection(){
 
 function filterTable() {
 
-
 let search =
 document.getElementById("search").value.toLowerCase();
 
-
 let scoreFilter =
 document.getElementById("scoreFilter").value;
-
 
 let statusFilter =
 document.getElementById("statusFilter").value;
@@ -556,9 +553,55 @@ for (let i = 1; i < rows.length; i++) {
 
     let row = rows[i];
 
+    let score =
+    row.cells[0].innerText;
+
+    let company =
+    row.cells[1].innerText.toLowerCase();
+
+    let title =
+    row.cells[2].innerText.toLowerCase();
+
+    let status =
+    row.cells[3].querySelector("select").value;
+
+
+    let matchSearch =
+    company.includes(search)
+    ||
+    title.includes(search);
+
+
+    let matchScore =
+    scoreFilter === ""
+    ||
+    parseInt(score) >= parseInt(scoreFilter);
+
+
+    let matchStatus =
+    statusFilter === ""
+    ||
+    status === statusFilter;
+
+
+    if(
+        matchSearch
+        &&
+        matchScore
+        &&
+        matchStatus
+    ){
+
+        row.style.display = "";
+
+    }
+    else{
+
+        row.style.display = "none";
+
+    }
 
 }
-
 
 }
 
