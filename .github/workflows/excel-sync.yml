@@ -5,6 +5,9 @@ on:
     paths:
       - "output/update_queue.json"
 
+permissions:
+  contents: write      
+
 jobs:
 
   update-excel:
@@ -16,6 +19,8 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: main
 
 
       - name: Setup Python
