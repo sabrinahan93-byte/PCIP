@@ -128,13 +128,13 @@ Summary
 
 <p>
 Last Update:
-2026-08-07 14:23:10
+2026-08-07 18:34:22
 </p>
 
 
 <p>
 Total Jobs:
-216
+220
 </p>
 
 
@@ -577,7 +577,7 @@ data-job-id="JOB-20260805-0162"
 >
 
 <option>
-New
+To Review
 </option>
 
 <option>
@@ -610,7 +610,7 @@ Offer
 <input
 class="date-edit"
 data-job-id="JOB-20260805-0162"
-value=""
+value="2026-08-07"
 >
 
 </td>
@@ -621,7 +621,7 @@ value=""
 <textarea
 class="notes-edit"
 data-job-id="JOB-20260805-0162"
-></textarea>
+>final sync test</textarea>
 
 </td>
 
@@ -1384,7 +1384,7 @@ for (let i = 1; i < rows.length; i++) {
     let row = rows[i];
 
     let score =
-    row.cells[0].innerText;
+    row.cells[0].innerText.trim();
 
     let company =
     row.cells[1].innerText.toLowerCase();
@@ -1405,11 +1405,15 @@ for (let i = 1; i < rows.length; i++) {
     let matchScore =
     scoreFilter === ""
     ||
+    scoreFilter === "all"
+    ||
     parseInt(score) >= parseInt(scoreFilter);
 
 
     let matchStatus =
     statusFilter === ""
+    ||
+    statusFilter === "all"
     ||
     status === statusFilter;
 

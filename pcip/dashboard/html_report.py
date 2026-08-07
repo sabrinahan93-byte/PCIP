@@ -554,7 +554,7 @@ for (let i = 1; i < rows.length; i++) {
     let row = rows[i];
 
     let score =
-    row.cells[0].innerText;
+    row.cells[0].innerText.trim();
 
     let company =
     row.cells[1].innerText.toLowerCase();
@@ -575,11 +575,15 @@ for (let i = 1; i < rows.length; i++) {
     let matchScore =
     scoreFilter === ""
     ||
+    scoreFilter === "all"
+    ||
     parseInt(score) >= parseInt(scoreFilter);
 
 
     let matchStatus =
     statusFilter === ""
+    ||
+    statusFilter === "all"
     ||
     status === statusFilter;
 
