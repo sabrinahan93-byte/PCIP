@@ -674,6 +674,25 @@ document.querySelectorAll(".save-btn")
         githubFile;
 
 
+        let fileResponse =
+        await fetch(
+            url,
+            {
+                headers:{
+                    "Authorization":
+                    "Bearer "
+                    +
+                    token,
+
+                    "Accept":
+                    "application/vnd.github+json"
+                }
+            }
+        );
+        let fileData =
+        await fileResponse.json();
+
+
 
         fetch(
             url,
@@ -696,7 +715,10 @@ document.querySelectorAll(".save-btn")
                     "Update dashboard request",
 
                     content:
-                    content
+                    content,
+
+                    sha:
+                    fileData.sha
 
                 })
 
