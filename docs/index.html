@@ -128,13 +128,13 @@ Summary
 
 <p>
 Last Update:
-2026-08-07 11:51:25
+2026-08-07 12:36:51
 </p>
 
 
 <p>
 Total Jobs:
-229
+260
 </p>
 
 
@@ -1430,7 +1430,6 @@ document.querySelectorAll(".save-btn")
         );
 
 
-
         if (!token){
 
             alert(
@@ -1442,52 +1441,31 @@ document.querySelectorAll(".save-btn")
         }
 
 
-
-
-        alert(
-        "Ready to update | "
-        +
-        "Job ID: "
-        +
-        jobId
-        +
-        " | Status: "
-        +
-        status
-        +
-        " | Date: "
-        +
-        appliedDate
-        +
-        " | Notes: "
-        +
-        notes
-        );
-        console.log({
-        job_id: jobId,
-        status: status,
-        applied_date: appliedDate,
-        notes: notes
-});
         let updateData = {
+
             job_id: jobId,
+
             status: status,
+
             applied_date: appliedDate,
+
             notes: notes,
+
             updated_at: new Date().toISOString()
-};
+
+        };
 
 
         console.log(
             "Update Request:",
             updateData
-);
+        );
 
 
         let content =
         btoa(
         JSON.stringify(updateData)
-);
+        );
 
 
         let url =
@@ -1505,11 +1483,11 @@ document.querySelectorAll(".save-btn")
 
 
 
+        // Step 1: Get current file SHA
+
         fetch(
             url,
             {
-                method:"PUT",
-
                 headers:{
                     "Authorization":
                     "Bearer "
@@ -1518,40 +1496,90 @@ document.querySelectorAll(".save-btn")
 
                     "Accept":
                     "application/vnd.github+json"
-                },
+                }
+            }
+        )
 
-                body:JSON.stringify({
+        .then(
+            response => response.json()
+        )
 
-                    message:
-                    "Update dashboard request",
+        .then(
+            fileData => {
 
-                    content:
-                    content
 
-                })
+                // Step 2: Update file with SHA
+
+
+                fetch(
+                    url,
+                    {
+
+                        method:"PUT",
+
+
+                        headers:{
+
+                            "Authorization":
+                            "Bearer "
+                            +
+                            token,
+
+
+                            "Accept":
+                            "application/vnd.github+json"
+
+                        },
+
+
+                        body:JSON.stringify({
+
+                            message:
+                            "Update dashboard request",
+
+
+                            content:
+                            content,
+
+
+                            sha:
+                            fileData.sha
+
+                        })
+
+                    }
+                )
+
+
+                .then(
+                    response => response.json()
+                )
+
+
+                .then(
+                    data => {
+
+
+                        console.log(
+                            "GitHub update result:",
+                            data
+                        );
+
+
+                        alert(
+                            "Update request uploaded"
+                        );
+
+
+                    }
+
+                );
+
 
             }
 
-    )
-    .then(
-        response => response.json()
-    )
+        );
 
-    .then(
-        data => {
-
-           console.log(
-               "GitHub update result:",
-               data
-            );
-
-           alert(
-               "Update request uploaded"
-            );
-
-        }
-
-    );
 
     };
 

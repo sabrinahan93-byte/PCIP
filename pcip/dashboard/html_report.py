@@ -600,7 +600,6 @@ document.querySelectorAll(".save-btn")
         );
 
 
-
         if (!token){
 
             alert(
@@ -612,52 +611,31 @@ document.querySelectorAll(".save-btn")
         }
 
 
-
-
-        alert(
-        "Ready to update | "
-        +
-        "Job ID: "
-        +
-        jobId
-        +
-        " | Status: "
-        +
-        status
-        +
-        " | Date: "
-        +
-        appliedDate
-        +
-        " | Notes: "
-        +
-        notes
-        );
-        console.log({
-        job_id: jobId,
-        status: status,
-        applied_date: appliedDate,
-        notes: notes
-});
         let updateData = {
+
             job_id: jobId,
+
             status: status,
+
             applied_date: appliedDate,
+
             notes: notes,
+
             updated_at: new Date().toISOString()
-};
+
+        };
 
 
         console.log(
             "Update Request:",
             updateData
-);
+        );
 
 
         let content =
         btoa(
         JSON.stringify(updateData)
-);
+        );
 
 
         let url =
@@ -674,8 +652,10 @@ document.querySelectorAll(".save-btn")
         githubFile;
 
 
-        let fileResponse =
-        await fetch(
+
+        // Step 1: Get current file SHA
+
+        fetch(
             url,
             {
                 headers:{
@@ -688,62 +668,88 @@ document.querySelectorAll(".save-btn")
                     "application/vnd.github+json"
                 }
             }
-        );
-        let fileData =
-        await fileResponse.json();
+        )
+
+        .then(
+            response => response.json()
+        )
+
+        .then(
+            fileData => {
 
 
+                // Step 2: Update file with SHA
 
-        fetch(
-            url,
-            {
-                method:"PUT",
 
-                headers:{
-                    "Authorization":
-                    "Bearer "
-                    +
-                    token,
+                fetch(
+                    url,
+                    {
 
-                    "Accept":
-                    "application/vnd.github+json"
-                },
+                        method:"PUT",
 
-                body:JSON.stringify({
 
-                    message:
-                    "Update dashboard request",
+                        headers:{
 
-                    content:
-                    content,
+                            "Authorization":
+                            "Bearer "
+                            +
+                            token,
 
-                    sha:
-                    fileData.sha
 
-                })
+                            "Accept":
+                            "application/vnd.github+json"
+
+                        },
+
+
+                        body:JSON.stringify({
+
+                            message:
+                            "Update dashboard request",
+
+
+                            content:
+                            content,
+
+
+                            sha:
+                            fileData.sha
+
+                        })
+
+                    }
+                )
+
+
+                .then(
+                    response => response.json()
+                )
+
+
+                .then(
+                    data => {
+
+
+                        console.log(
+                            "GitHub update result:",
+                            data
+                        );
+
+
+                        alert(
+                            "Update request uploaded"
+                        );
+
+
+                    }
+
+                );
+
 
             }
 
-    )
-    .then(
-        response => response.json()
-    )
+        );
 
-    .then(
-        data => {
-
-           console.log(
-               "GitHub update result:",
-               data
-            );
-
-           alert(
-               "Update request uploaded"
-            );
-
-        }
-
-    );
 
     };
 
