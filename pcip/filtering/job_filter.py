@@ -82,6 +82,51 @@ MEDIUM_VALUE_KEYWORDS = [
 
 
 
+COMBINATION_KEYWORDS = {
+
+    # AI + Payment related roles
+    "ai_payment": {
+        "keywords": [
+            "ai",
+            "payment"
+        ],
+        "score": 20
+    },
+
+
+    # Cross-border acquiring related roles
+    "cross_border_acquiring": {
+        "keywords": [
+            "cross border",
+            "acquiring"
+        ],
+        "score": 20
+    },
+
+
+    # Merchant payment solution roles
+    "merchant_payment_solution": {
+        "keywords": [
+            "merchant",
+            "payment"
+        ],
+        "score": 15
+    },
+
+
+    # Payment partnership roles
+    "payment_partnership": {
+        "keywords": [
+            "payment",
+            "partnership"
+        ],
+        "score": 20
+    }
+
+}
+
+
+
 EXCLUDE_KEYWORDS = [
 
     "software engineer",
@@ -127,10 +172,11 @@ def calculate_match_score(job):
 
 
 
+    # -----------------------------
     # High value matches
+    # -----------------------------
 
     for keyword in HIGH_VALUE_KEYWORDS:
-
 
         if keyword in title:
 
@@ -138,10 +184,11 @@ def calculate_match_score(job):
 
 
 
+    # -----------------------------
     # Medium value matches
+    # -----------------------------
 
     for keyword in MEDIUM_VALUE_KEYWORDS:
-
 
         if keyword in title:
 
@@ -149,10 +196,12 @@ def calculate_match_score(job):
 
 
 
-    # General payment / commercial relevance
+
+    # -----------------------------
+    # General matches
+    # -----------------------------
 
     for keyword in MATCH_KEYWORDS:
-
 
         if keyword in title:
 
@@ -160,23 +209,45 @@ def calculate_match_score(job):
 
 
 
-    # Penalty
+    # -----------------------------
+    # Combination matches
+    # -----------------------------
+
+    for rule in COMBINATION_KEYWORDS.values():
+
+        matched = True
+
+
+        for keyword in rule["keywords"]:
+
+            if keyword not in title:
+
+                matched = False
+                break
+
+                
+        if matched:
+
+            score += rule["score"]
+
+
+
+
+   # -----------------------------
+    # Exclude penalty
+    # -----------------------------
 
     for keyword in EXCLUDE_KEYWORDS:
-
 
         if keyword in title:
 
             score -= 50
 
-
-
-    # Limit
+  # Limit
 
     if score > 100:
 
         score = 100
-
 
 
     if score < 0:
@@ -184,9 +255,7 @@ def calculate_match_score(job):
         score = 0
 
 
-
     return score
-
 
 
 
