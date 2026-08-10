@@ -322,6 +322,8 @@ EXCLUDE_KEYWORDS = [
 
     "San Francisco",
     "Japanese",
+    "London",
+    
 
 
     # =========================================================
