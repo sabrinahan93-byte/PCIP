@@ -245,8 +245,12 @@ All Scores
 All Status
 </option>
 
-<option value="To Review">
-To Review
+<option value="New">
+New
+</option>
+
+<option value="Watching">
+Watching
 </option>
 
 <option value="Applied">
