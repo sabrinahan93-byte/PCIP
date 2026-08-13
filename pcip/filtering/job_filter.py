@@ -442,7 +442,7 @@ def calculate_match_score(job):
 
     for keyword in EXCLUDE_KEYWORDS:
 
-        if keyword in title:
+        if keyword.lower() in title:
 
             score -= 50
 
