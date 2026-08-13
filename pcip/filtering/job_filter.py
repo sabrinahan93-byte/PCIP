@@ -376,14 +376,48 @@ def calculate_match_score(job):
 
 
     # -----------------------------
+    # Helper: keep only the most
+    # specific matching keywords
+    # within the same scoring layer
+    # -----------------------------
+
+    def get_specific_matches(keywords):
+
+        matched = [
+            keyword
+            for keyword in keywords
+            if keyword.lower() in title
+        ]
+
+        specific_matches = []
+
+        for keyword in matched:
+
+            is_contained_by_longer_match = any(
+
+                keyword != other
+                and keyword in other
+                for other in matched
+
+            )
+
+            if not is_contained_by_longer_match:
+
+                specific_matches.append(keyword)
+
+        return specific_matches
+
+
+
+    # -----------------------------
     # High value matches
     # -----------------------------
 
-    for keyword in HIGH_VALUE_KEYWORDS:
+    high_matches = get_specific_matches(
+        HIGH_VALUE_KEYWORDS
+    )
 
-        if keyword in title:
-
-            score += 30
+    score += 30 * len(high_matches)
 
 
 
@@ -391,12 +425,11 @@ def calculate_match_score(job):
     # Medium value matches
     # -----------------------------
 
-    for keyword in MEDIUM_VALUE_KEYWORDS:
+    medium_matches = get_specific_matches(
+        MEDIUM_VALUE_KEYWORDS
+    )
 
-        if keyword in title:
-
-            score += 15
-
+    score += 15 * len(medium_matches)
 
 
 
@@ -404,11 +437,11 @@ def calculate_match_score(job):
     # General matches
     # -----------------------------
 
-    for keyword in MATCH_KEYWORDS:
+    general_matches = get_specific_matches(
+        MATCH_KEYWORDS
+    )
 
-        if keyword in title:
-
-            score += 5
+    score += 5 * len(general_matches)
 
 
 
@@ -423,30 +456,35 @@ def calculate_match_score(job):
 
         for keyword in rule["keywords"]:
 
-            if keyword not in title:
+            if keyword.lower() not in title:
 
                 matched = False
                 break
 
-                
+
         if matched:
 
             score += rule["score"]
 
 
 
-
-   # -----------------------------
+    # -----------------------------
     # Exclude penalty
     # -----------------------------
 
-    for keyword in EXCLUDE_KEYWORDS:
+    exclude_matches = get_specific_matches(
+        EXCLUDE_KEYWORDS
+    )
 
-        if keyword.lower() in title:
+    if exclude_matches:
 
-            score -= 50
+        score -= 50
 
-  # Limit
+
+
+    # -----------------------------
+    # Limit
+    # -----------------------------
 
     if score > 100:
 
@@ -459,8 +497,6 @@ def calculate_match_score(job):
 
 
     return score
-
-
 
 def apply_match_score(job):
 
