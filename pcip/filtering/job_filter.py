@@ -101,6 +101,7 @@ HIGH_VALUE_KEYWORDS = [
 
     "payment partnership",
     "payment partnerships",
+    "business development",
 
     "merchant solution",
     "merchant solutions",
@@ -164,8 +165,6 @@ MEDIUM_VALUE_KEYWORDS = [
 
     # Commercial
 
-    "business development",
-    "business development manager",
 
     "customer success",
     "client success",
