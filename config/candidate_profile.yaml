@@ -1,0 +1,407 @@
+candidate:
+
+  name: Sabrina Han
+
+  professional_identity:
+    primary:
+      - Cross-Border Payments Commercial Professional
+      - Payment Solutions Specialist
+      - Strategic Partnership & Merchant Growth Professional
+
+    positioning_statement:
+      >
+      Commercial professional with 5+ years experience in cross-border
+      payments and global merchant solutions, bridging business development,
+      payment infrastructure, technical integration, risk management,
+      and enterprise client growth.
+
+  target_markets:
+    priority:
+      - Hong Kong
+      - Shenzhen
+      - Remote APAC
+
+    secondary:
+      - Malaysia
+      - Singapore
+
+
+  industries:
+
+    core:
+      - Cross-border Payments
+      - Fintech
+      - Payment Infrastructure
+      - Merchant Services
+      - Digital Banking
+      - Embedded Finance
+
+    adjacent:
+      - SaaS
+      - B2B Financial Technology
+      - Ecommerce Infrastructure
+      - Treasury Management
+      - Global Commerce Platforms
+
+
+  experience_profile:
+
+    years:
+      total_business_experience: 10
+      payments_experience: 5
+
+    business_model:
+      - B2B
+      - Enterprise Sales
+      - Strategic Accounts
+      - Platform Partnerships
+
+    customer_segments:
+      - Enterprise Merchants
+      - Cross-border Ecommerce Sellers
+      - Mobile Apps
+      - SaaS Platforms
+      - Marketplace Businesses
+      - High Growth Internet Companies
+
+
+
+  capabilities:
+
+
+    payment_solution_design:
+
+      weight: 5
+
+      confidence: high
+
+      description:
+        >
+        Ability to design customized global payment solutions based on
+        merchant business models, payment flows, settlement requirements,
+        and risk scenarios.
+
+      keywords:
+
+        strong:
+          - payment solution
+          - payment infrastructure
+          - acquiring
+          - issuing
+          - payment gateway
+          - payment orchestration
+          - payment flow
+          - payment routing
+          - merchant solution
+
+        medium:
+          - checkout
+          - digital payment
+          - payment optimization
+          - transaction processing
+
+
+
+    merchant_growth:
+
+      weight: 5
+
+      confidence: high
+
+      description:
+        >
+        Ability to grow strategic merchants through upsell, cross-sell,
+        product expansion and share of wallet strategies.
+
+      keywords:
+
+        strong:
+          - strategic account
+          - enterprise merchant
+          - account expansion
+          - upsell
+          - cross sell
+          - customer growth
+          - portfolio growth
+
+        medium:
+          - customer success
+          - client relationship
+          - account management
+
+
+
+    strategic_partnership:
+
+      weight: 5
+
+      confidence: high
+
+      description:
+        >
+        Experience building partnerships with payment providers,
+        ecosystem partners and industry-leading companies.
+
+      keywords:
+
+        strong:
+          - strategic partnership
+          - channel partnership
+          - ecosystem partnership
+          - payment partnership
+          - PSP partnership
+          - acquiring partnership
+
+        medium:
+          - alliance
+          - partner management
+          - business ecosystem
+
+
+
+    technical_business_bridge:
+
+      weight: 4
+
+      confidence: high
+
+      description:
+        >
+        Ability to translate business requirements into technical
+        implementation requirements and coordinate engineering teams.
+
+      keywords:
+
+        strong:
+          - API integration
+          - technical solution
+          - implementation
+          - sandbox testing
+          - go live
+          - UAT
+
+        medium:
+          - product team
+          - engineering collaboration
+          - integration
+
+
+
+    risk_compliance:
+
+      weight: 4
+
+      confidence: high
+
+      description:
+        >
+        Understanding of payment risk, chargeback management,
+        compliance requirements and transaction optimization.
+
+      keywords:
+
+        strong:
+          - chargeback
+          - fraud prevention
+          - risk management
+          - compliance
+          - KYC
+          - KYB
+          - settlement
+
+        medium:
+          - reconciliation
+          - rolling reserve
+          - interchange
+          - card scheme
+
+
+
+    cross_border_business:
+
+      weight: 4
+
+      confidence: high
+
+      keywords:
+
+        strong:
+          - cross-border
+          - global payment
+          - overseas expansion
+          - international merchant
+          - local payment method
+
+        medium:
+          - ecommerce
+          - global market
+          - localization
+
+
+
+    commercial_strategy:
+
+      weight: 3
+
+      confidence: medium
+
+      keywords:
+
+        strong:
+          - GTM
+          - market expansion
+          - commercial strategy
+          - business strategy
+
+        medium:
+          - growth strategy
+          - market development
+
+
+
+  target_roles:
+
+
+    tier_1:
+
+      description:
+        >
+        Highest priority roles matching candidate core advantages.
+
+      roles:
+
+        - Payment Solutions Manager
+        - Senior Solutions Consultant
+        - Commercial Solutions Manager
+        - Payment Solution Consultant
+        - Strategic Partnership Manager
+        - Payment Partnership Manager
+        - PSP Partnership Manager
+        - Acquiring Partnership Manager
+
+
+      minimum_score: 85
+
+
+
+    tier_2:
+
+      roles:
+
+        - Strategic Account Manager
+        - Enterprise Account Manager
+        - Global Account Manager
+        - Merchant Success Manager
+        - Commercial Product Manager
+        - Payment Product Manager
+        - Product Partnership Manager
+
+
+      minimum_score: 75
+
+
+
+    tier_3:
+
+      roles:
+
+        - Market Expansion Manager
+        - GTM Manager
+        - Commercial Strategy Manager
+        - Payment Program Manager
+        - Implementation Manager
+
+
+      minimum_score: 70
+
+
+
+  excluded_roles:
+
+
+    strong_negative:
+
+      - Software Engineer
+      - Backend Engineer
+      - Data Scientist
+      - SDR
+      - BDR
+      - Telemarketing
+      - Inside Sales
+      - Junior Sales
+      - Sales Coordinator
+
+
+    industry_negative:
+
+      - Advertising Sales
+      - Media Partnership
+      - Influencer Partnership
+      - Gaming Operation
+      - Casino
+      - Pure Crypto Trading
+
+
+
+  company_preference:
+
+
+    ideal_company:
+
+      types:
+
+        - Payment Processor
+        - PSP
+        - Acquirer
+        - Fintech Infrastructure Company
+        - Digital Bank
+        - Card Network
+        - B2B SaaS Financial Platform
+
+
+    examples:
+
+      tier_1:
+
+        - Stripe
+        - Adyen
+        - Visa
+        - Mastercard
+        - Airwallex
+        - Payoneer
+        - Thunes
+        - dLocal
+        - Nuvei
+
+
+  scoring_adjustment:
+
+
+    bonus:
+
+      payment_infrastructure_company:
+        points: 10
+
+      APAC_role:
+        points: 5
+
+      enterprise_customer_focus:
+        points: 5
+
+      API_integration_requirement:
+        points: 5
+
+
+    penalty:
+
+      pure_sales:
+        points: -30
+
+      unrelated_partnership:
+        points: -25
+
+      junior_level:
+        points: -30
+
+      non_fintech_industry:
+        points: -20
